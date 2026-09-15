@@ -1,0 +1,19 @@
+[PROJECT]
+
+[RP:UNTITLED_1]
+1=
+
+[OPENWINDOW_1]
+MAXIM=0
+TOP=-6
+LEFT=0
+HEIGHT=726
+WIDTH=1106
+
+[RP:ASSISTMOD]
+1=
+
+[MRUFILES]
+1=C:\Users\pisciella\Dropbox\CORSO Ricerca Operativa\GAMS tutorial\Tutorial 4\Es14\AssistMod.lst
+2=C:\Users\pisciella\Dropbox\CORSO Ricerca Operativa\GAMS tutorial\Tutorial 4\Es14\AssistMod.gms
+3=C:\Users\pisciella\Dropbox\CORSO Ricerca Operativa\GAMS tutorial\Tutorial 4\Es14\Untitled_1.gms

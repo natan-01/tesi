@@ -1,0 +1,76 @@
+option lp=cplex
+
+
+$include C:\Users\pisciella\Documents\Implementazioni\proveRO\MediaCondData.gms
+positive variable v(s);
+variable z funzione obiettivo;
+
+equation fo;
+fo..
+         sum(s,X(s)*v(s))/0.01=e=z;
+
+equation percent;
+percent..
+         sum(s,v(s))=e=0.01;
+
+equation probound(s);
+probound(s)..
+v(s)=l=1/card(s);
+
+model condmean /fo,percent,probound/;
+
+solve condmean using lp minimizing z;
+
+display z.l, v.l;
+
+
+variable zd, eta;
+positive variable y(s);
+
+equation fod;
+fod..
+eta-sum(s,y(s))/(card(s)*0.01)=e=zd;
+
+equation mind(s);
+mind(s)..
+y(s)=g=eta-X(s);
+
+model dual /fod,mind/;
+solve dual using lp maximizing zd;
+
+display zd.l;
+
+*----------------- Modello 3 ------
+
+scalar Garanzia /2/;
+
+positive variable q(produttore);
+variable zP;
+
+equation foP;
+foP..
+         sum(produttori, costi(produttori)*q(produttori))=e=zP;
+
+equation totPort;
+totport..
+sum(produttori,q(produttori))=e=1;
+
+equation PosCV(s);
+PosCV(s)..
+y(s)=g=eta-sum(produttori, D(produttori,s)*q(produttori));
+
+equation CVaR;
+CVaR..
+eta-sum(s,y(s)*1/(card(s)))/0.01 =g= Garanzia;
+
+model AllocazioneProduzione /foP,totPort,PosCV,CVaR/;
+
+solve AllocazioneProduzione using lp minimizing zP;
+
+parameter optCVaR;
+optCVaR=eta.l-sum(s,y.l(s)*1/(card(s)))/0.01
+
+display q.l, optCVaR;
+
+
+

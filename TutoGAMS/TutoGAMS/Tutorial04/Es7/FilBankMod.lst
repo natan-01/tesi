@@ -1,0 +1,276 @@
+GAMS Rev 232  WEX-WEI 23.2.1 x86_64/MS Windows          11/24/16 17:22:25 Page 1
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+C o m p i l a t i o n
+
+
+   1  option mip = cplex;
+   2   
+   3   
+   4  set filiali /A,B,C,D,E,F,G,H,I/;
+   5  set province /CZ,CS,KR,RC,VV/;
+   6   
+   7  set allocazione(filiali,province) dove possiamo aprire le filiali
+   8  /
+   9  A.RC
+  10  B.CS
+  11  C.RC
+  12  D.KR
+  13  E.CZ
+  14  F.VV
+  15  G.CZ
+  16  H.VV
+  17  I.RC
+  18  /;
+  19   
+  20  parameter costiattivazione(filiali)
+  21  /
+  22  A=50
+  23  B=40
+  24  C=30
+  25  D=25
+  26  E=40
+  27  F=50
+  28  G=60
+  29  H=40
+  30  I=30
+  31  /;
+  32   
+  33  parameter potenzialiclienti(filiali)
+  34  /
+  35  A=300
+  36  B=100
+  37  C=250
+  38  D=200
+  39  E=400
+  40  F=120
+  41  G=100
+  42  H=100
+  43  I=400
+  44  /;
+  45   
+  46  binary variable x(filiali) apertura filiale;
+  47  variable z fo;
+  48  scalar budget /200/;
+  49   
+  50  equation budgetc,minfiliali1(province),minfiliali2(province),maxfiliali(pr
+      ovince),fo;
+  51   
+  52  fo..
+  53           z=e=sum(filiali,potenzialiclienti(filiali)*x(filiali));
+  54   
+  55  budgetc..
+  56           sum(filiali,costiattivazione(filiali)*x(filiali))=l=budget;
+  57   
+  58  minfiliali1('RC')..
+  59           sum(filiali$allocazione(filiali,'RC'),x(filiali))=g=2;
+  60   
+  61  minfiliali2('CZ')..
+  62           sum(filiali$allocazione(filiali,'CZ'),x(filiali))=g=1;
+  63   
+  64   
+  65  maxfiliali('VV')..
+  66           sum(filiali$(allocazione(filiali,'VV') ),x(filiali))=l=2;
+  67   
+  68   
+  69  model FilBank /all/;
+  70   
+  71  FilBank.optcr=0
+  72   
+  73  solve FilBank using mip maximizing z;
+  74   
+  75   
+  76   
+  77  display x.l;
+
+
+COMPILATION TIME     =        0.000 SECONDS      3 Mb  WEX232-232 Aug 11, 2009
+GAMS Rev 232  WEX-WEI 23.2.1 x86_64/MS Windows          11/24/16 17:22:25 Page 2
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Equation Listing    SOLVE FilBank Using MIP From line 73
+
+
+---- budgetc  =L=  
+
+budgetc..  50*x(A) + 40*x(B) + 30*x(C) + 25*x(D) + 40*x(E) + 50*x(F) + 60*x(G)
+     
+      + 40*x(H) + 30*x(I) =L= 200 ; (LHS = 0)
+     
+
+---- minfiliali1  =G=  
+
+minfiliali1(RC)..  x(A) + x(C) + x(I) =G= 2 ; (LHS = 0, INFES = 2 ****)
+     
+
+---- minfiliali2  =G=  
+
+minfiliali2(CZ)..  x(E) + x(G) =G= 1 ; (LHS = 0, INFES = 1 ****)
+     
+
+---- maxfiliali  =L=  
+
+maxfiliali(VV)..  x(F) + x(H) =L= 2 ; (LHS = 0)
+     
+
+---- fo  =E=  
+
+fo..  - 300*x(A) - 100*x(B) - 250*x(C) - 200*x(D) - 400*x(E) - 120*x(F)
+     
+      - 100*x(G) - 100*x(H) - 400*x(I) + z =E= 0 ; (LHS = 0)
+     
+GAMS Rev 232  WEX-WEI 23.2.1 x86_64/MS Windows          11/24/16 17:22:25 Page 3
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Column Listing      SOLVE FilBank Using MIP From line 73
+
+
+---- x  apertura filiale
+
+x(A)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+       50       budgetc
+        1       minfiliali1(RC)
+     -300       fo
+
+x(B)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+       40       budgetc
+     -100       fo
+
+x(C)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+       30       budgetc
+        1       minfiliali1(RC)
+     -250       fo
+
+REMAINING 6 ENTRIES SKIPPED
+
+---- z  fo
+
+z
+                (.LO, .L, .UP, .M = -INF, 0, +INF, 0)
+        1       fo
+
+GAMS Rev 232  WEX-WEI 23.2.1 x86_64/MS Windows          11/24/16 17:22:25 Page 4
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Model Statistics    SOLVE FilBank Using MIP From line 73
+
+
+MODEL STATISTICS
+
+BLOCKS OF EQUATIONS           5     SINGLE EQUATIONS            5
+BLOCKS OF VARIABLES           2     SINGLE VARIABLES           10
+NON ZERO ELEMENTS            26     DISCRETE VARIABLES          9
+
+
+GENERATION TIME      =        0.000 SECONDS      4 Mb  WEX232-232 Aug 11, 2009
+
+
+EXECUTION TIME       =        0.000 SECONDS      4 Mb  WEX232-232 Aug 11, 2009
+GAMS Rev 232  WEX-WEI 23.2.1 x86_64/MS Windows          11/24/16 17:22:25 Page 5
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Solution Report     SOLVE FilBank Using MIP From line 73
+
+
+               S O L V E      S U M M A R Y
+
+     MODEL   FilBank             OBJECTIVE  z
+     TYPE    MIP                 DIRECTION  MAXIMIZE
+     SOLVER  CPLEX               FROM LINE  73
+
+**** SOLVER STATUS     1 Normal Completion         
+**** MODEL STATUS      1 Optimal                   
+**** OBJECTIVE VALUE             1550.0000
+
+ RESOURCE USAGE, LIMIT          0.041      1000.000
+ ITERATION COUNT, LIMIT         1    2000000000
+
+ILOG CPLEX       Aug 14, 2009 23.2.1 WEX 12361.12582 WEI x86_64/MS Windows
+Cplex 12.1.0, GAMS Link 34 
+
+Cplex MIP uses 1 of 4 parallel threads. Change default with option THREADS.
+MIP status(101): integer optimal solution
+Fixed MIP status(1): optimal
+Proven optimal solution.
+
+MIP Solution:         1550.000000    (1 iterations, 0 nodes)
+Final Solve:          1550.000000    (0 iterations)
+
+Best possible:        1550.000000
+Absolute gap:            0.000000
+Relative gap:            0.000000
+
+
+                       LOWER     LEVEL     UPPER    MARGINAL
+
+---- EQU budgetc        -INF    175.000   200.000      .         
+
+---- EQU minfiliali1  
+
+      LOWER     LEVEL     UPPER    MARGINAL
+
+RC     2.000     3.000     +INF       .         
+
+---- EQU minfiliali2  
+
+      LOWER     LEVEL     UPPER    MARGINAL
+
+CZ     1.000     1.000     +INF       .         
+
+---- EQU maxfiliali  
+
+      LOWER     LEVEL     UPPER    MARGINAL
+
+VV     -INF       .        2.000      .         
+
+                       LOWER     LEVEL     UPPER    MARGINAL
+
+---- EQU fo              .         .         .        1.000      
+
+---- VAR x  apertura filiale
+
+     LOWER     LEVEL     UPPER    MARGINAL
+
+A      .        1.000     1.000   300.000      
+B      .         .        1.000   100.000      
+C      .        1.000     1.000   250.000      
+D      .        1.000     1.000   200.000      
+E      .        1.000     1.000   400.000      
+F      .         .        1.000   120.000      
+G      .         .        1.000   100.000      
+H      .         .        1.000   100.000      
+I      .        1.000     1.000   400.000      
+
+                       LOWER     LEVEL     UPPER    MARGINAL
+
+---- VAR z              -INF   1550.000     +INF       .         
+
+  z  fo
+
+
+**** REPORT SUMMARY :        0     NONOPT
+                             0 INFEASIBLE
+                             0  UNBOUNDED
+GAMS Rev 232  WEX-WEI 23.2.1 x86_64/MS Windows          11/24/16 17:22:25 Page 6
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+E x e c u t i o n
+
+
+----     77 VARIABLE x.L  apertura filiale
+
+A 1.000,    C 1.000,    D 1.000,    E 1.000,    I 1.000
+
+
+
+EXECUTION TIME       =        0.016 SECONDS      3 Mb  WEX232-232 Aug 11, 2009
+
+
+USER: Matematica, Statistica, Informatica e ApplicaziS091013:0751AN-WIN
+      Università degli Studi di Bergamo                          DC7952
+      License for teaching and research at degree granting institutions
+
+
+**** FILE SUMMARY
+
+Input      C:\Users\pisciella\Dropbox\CORSO Ricerca Operativa\GAMS tutorial\Tuto
+           rial 4\Es7\FilBankMod.gms
+Output     C:\Users\pisciella\Dropbox\CORSO Ricerca Operativa\GAMS tutorial\Tuto
+           rial 4\Es7\FilBankMod.lst

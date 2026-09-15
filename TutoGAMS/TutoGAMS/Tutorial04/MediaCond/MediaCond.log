@@ -1,0 +1,110 @@
+
+--- Job MediaCond.gms Start 11/23/16 18:15:45 WEX-WEI 23.2.1 x86_64/MS Windows     
+GAMS Rev 232  Copyright (C) 1987-2009 GAMS Development. All rights reserved
+Licensee: Matematica, Statistica, Informatica e ApplicaziS091013:0751AN-WIN
+          Università degli Studi di Bergamo                          DC7952
+          License for teaching and research at degree granting institutions
+--- Starting compilation
+--- MediaCond.gms(4) 2 Mb
+--- .MediaCondData.gms(4017) 3 Mb
+--- MediaCond.gms(76) 3 Mb
+--- Starting execution: elapsed 0:00:00.129
+--- MediaCond.gms(1) 4 Mb
+--- Generating LP model condmean
+--- MediaCond.gms(4039) 4 Mb
+---   1,002 rows  1,001 columns  3,001 non-zeroes
+--- MediaCond.gms(4039) 4 Mb
+--- Executing CPLEX: elapsed 0:00:00.167
+--- MediaCond.gms(4039) 4 Mb
+
+ILOG CPLEX       Aug 14, 2009 23.2.1 WEX 12361.12582 WEI x86_64/MS Windows
+Cplex 12.1.0, GAMS Link 34 
+Cplex licensed for 1 use of parallel lp, qp, mip and barrier.
+
+Reading data...
+Starting Cplex...
+Tried aggregator 1 time.
+LP Presolve eliminated 1001 rows and 1 columns.
+Reduced LP has 1 rows, 1000 columns, and 1000 nonzeros.
+Presolve time =    0.00 sec.
+Initializing dual steep norms . . .
+
+Iteration log . . .
+Iteration:     1   Dual objective     =            -3.100342
+LP status(1): optimal
+
+Optimal solution found.
+Objective :          -3.100342
+
+--- Restarting execution
+--- MediaCond.gms(4039) 2 Mb
+--- Reading solution for model condmean
+--- MediaCond.gms(4039) 2 Mb
+--- Executing after solve: elapsed 0:00:00.244
+--- MediaCond.gms(4041) 3 Mb
+--- Generating LP model dual
+--- MediaCond.gms(4056) 3 Mb
+---   1,001 rows  1,002 columns  3,002 non-zeroes
+--- MediaCond.gms(4056) 3 Mb
+--- Executing CPLEX: elapsed 0:00:00.257
+--- MediaCond.gms(4056) 3 Mb
+
+ILOG CPLEX       Aug 14, 2009 23.2.1 WEX 12361.12582 WEI x86_64/MS Windows
+Cplex 12.1.0, GAMS Link 34 
+Cplex licensed for 1 use of parallel lp, qp, mip and barrier.
+
+Reading data...
+Starting Cplex...
+Tried aggregator 1 time.
+LP Presolve eliminated 1 rows and 1 columns.
+Reduced LP has 1000 rows, 1001 columns, and 2000 nonzeros.
+Presolve time =    0.00 sec.
+
+Iteration log . . .
+Iteration:     1   Dual infeasibility =             0.900000
+Iteration:    11   Dual objective     =             0.242807
+LP status(1): optimal
+
+Optimal solution found.
+Objective :          -3.100342
+
+--- Restarting execution
+--- MediaCond.gms(4056) 2 Mb
+--- Reading solution for model dual
+--- MediaCond.gms(4056) 2 Mb
+--- Executing after solve: elapsed 0:00:00.344
+--- MediaCond.gms(4058) 3 Mb
+--- Generating LP model AllocazioneProduzione
+--- MediaCond.gms(4085) 4 Mb
+---   1,003 rows  1,005 columns  6,008 non-zeroes
+--- MediaCond.gms(4085) 4 Mb
+--- Executing CPLEX: elapsed 0:00:00.358
+--- MediaCond.gms(4085) 4 Mb
+
+ILOG CPLEX       Aug 14, 2009 23.2.1 WEX 12361.12582 WEI x86_64/MS Windows
+Cplex 12.1.0, GAMS Link 34 
+Cplex licensed for 1 use of parallel lp, qp, mip and barrier.
+
+Reading data...
+Starting Cplex...
+Tried aggregator 1 time.
+LP Presolve eliminated 1 rows and 1 columns.
+Reduced LP has 1002 rows, 1004 columns, and 6004 nonzeros.
+Presolve time =    0.00 sec.
+Initializing dual steep norms . . .
+
+Iteration log . . .
+Iteration:     1   Dual objective     =            12.000000
+LP status(1): optimal
+
+Optimal solution found.
+Objective :          49.285714
+
+--- Restarting execution
+--- MediaCond.gms(4085) 2 Mb
+--- Reading solution for model AllocazioneProduzione
+--- MediaCond.gms(4085) 3 Mb
+--- Executing after solve: elapsed 0:00:00.468
+--- MediaCond.gms(4090) 3 Mb
+*** Status: Normal completion
+--- Job MediaCond.gms Stop 11/23/16 18:15:46 elapsed 0:00:00.472

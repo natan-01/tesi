@@ -1,0 +1,156 @@
+
+--- Job telecamereMod.gms Start 11/22/16 19:00:00 WEX-WEI 23.2.1 x86_64/MS Windows     
+GAMS Rev 232  Copyright (C) 1987-2009 GAMS Development. All rights reserved
+Licensee: Matematica, Statistica, Informatica e ApplicaziS091013:0751AN-WIN
+          Università degli Studi di Bergamo                          DC7952
+          License for teaching and research at degree granting institutions
+--- Starting compilation
+--- telecamereMod.gms(104) 3 Mb
+--- Starting execution: elapsed 0:00:00.007
+--- telecamereMod.gms(1) 4 Mb
+--- Generating MIP model local1
+--- telecamereMod.gms(98) 4 Mb
+---   12 rows  12 columns  65 non-zeroes
+---   11 discrete-columns
+--- telecamereMod.gms(98) 4 Mb
+--- Executing CPLEX: elapsed 0:00:00.078
+--- telecamereMod.gms(98) 4 Mb
+
+ILOG CPLEX       Aug 14, 2009 23.2.1 WEX 12361.12582 WEI x86_64/MS Windows
+Cplex 12.1.0, GAMS Link 34 
+
+Cplex MIP uses 1 of 4 parallel threads. Change default with option THREADS.
+Reading data...
+Starting Cplex...
+Tried aggregator 1 time.
+MIP Presolve eliminated 1 rows and 1 columns.
+Reduced MIP has 11 rows, 11 columns, and 53 nonzeros.
+Reduced MIP has 11 binaries, 0 generals, 0 SOSs, and 0 indicators.
+Presolve time =    0.00 sec.
+MIP emphasis: balance optimality and feasibility.
+MIP search method: dynamic search.
+Parallel mode: none, using 1 thread.
+Tried aggregator 1 time.
+No LP presolve or aggregator reductions.
+Presolve time =    0.00 sec.
+
+Iteration      Dual Objective            In Variable           Out Variable
+     1              15.000000                  x(a3)          cop(a1) slack
+     2              15.000000                  x(a4)          cop(a4) slack
+     3              25.000000                  x(a9)          cop(a6) slack
+     4              30.000000          cop(a4) slack                  x(a4)
+     5              35.000000                  x(a6)          cop(a7) slack
+     6              35.000000                  x(a2)         cop(a10) slack
+     7              35.000000                 x(a10)         cop(a11) slack
+     8              40.000000                  x(a5)          cop(a4) slack
+     9              42.500000          cop(a1) slack          cop(a3) slack
+    10              42.500000         cop(a10) slack          cop(a8) slack
+    11              42.500000                  x(a1)                  x(a6)
+Root relaxation solution time =    0.03 sec.
+
+        Nodes                                         Cuts/
+   Node  Left     Objective  IInf  Best Integer     Best Node    ItCnt     Gap
+
+*     0+    0                           85.0000                     11     --- 
+      0     0       42.5000     6       85.0000       42.5000       11   50.00%
+*     0+    0                           50.0000       42.5000       11   15.00%
+      0     0        cutoff             50.0000                     11    0.00%
+
+Zero-half cuts applied:  2
+Gomory fractional cuts applied:  1
+MIP status(101): integer optimal solution
+Fixing integer variables, and solving final LP...
+Tried aggregator 1 time.
+LP Presolve eliminated 12 rows and 12 columns.
+All rows and columns eliminated.
+Presolve time =    0.00 sec.
+Fixed MIP status(1): optimal
+
+Proven optimal solution.
+
+MIP Solution:           50.000000    (11 iterations, 0 nodes)
+Final Solve:            50.000000    (0 iterations)
+
+Best possible:          50.000000
+Absolute gap:            0.000000
+Relative gap:            0.000000
+
+--- Restarting execution
+--- telecamereMod.gms(98) 2 Mb
+--- Reading solution for model local1
+--- telecamereMod.gms(98) 2 Mb
+--- Executing after solve: elapsed 0:00:00.210
+--- telecamereMod.gms(99) 3 Mb
+--- Generating MIP model local2
+--- telecamereMod.gms(101) 3 Mb
+---   12 rows  12 columns  65 non-zeroes
+---   11 discrete-columns
+--- telecamereMod.gms(101) 3 Mb
+--- Executing CPLEX: elapsed 0:00:00.215
+--- telecamereMod.gms(101) 3 Mb
+
+ILOG CPLEX       Aug 14, 2009 23.2.1 WEX 12361.12582 WEI x86_64/MS Windows
+Cplex 12.1.0, GAMS Link 34 
+
+Cplex MIP uses 1 of 4 parallel threads. Change default with option THREADS.
+Reading data...
+Starting Cplex...
+Tried aggregator 1 time.
+MIP Presolve eliminated 1 rows and 1 columns.
+Reduced MIP has 11 rows, 11 columns, and 53 nonzeros.
+Reduced MIP has 11 binaries, 0 generals, 0 SOSs, and 0 indicators.
+Presolve time =    0.00 sec.
+MIP emphasis: balance optimality and feasibility.
+MIP search method: dynamic search.
+Parallel mode: none, using 1 thread.
+Tried aggregator 1 time.
+No LP presolve or aggregator reductions.
+Presolve time =    0.00 sec.
+
+Iteration      Dual Objective            In Variable           Out Variable
+     1               1.000000                  x(a3)          cop(a1) slack
+     2               1.000000                  x(a4)          cop(a4) slack
+     3               2.000000                  x(a5)          cop(a6) slack
+     4               2.000000                  x(a6)          cop(a7) slack
+     5               2.000000                  x(a7)         cop(a10) slack
+     6               2.000000                  x(a8)          cop(a9) slack
+     7               2.000000                  x(a1)          cop(a3) slack
+     8               2.000000                  x(a2)          cop(a5) slack
+     9               2.000000          cop(a4) slack          cop(a8) slack
+    10               2.000000          cop(a9) slack         cop(a11) slack
+    11               2.000000                  x(a9)                  x(a4)
+    12               2.500000          cop(a1) slack          cop(a4) slack
+Root relaxation solution time =    0.01 sec.
+
+        Nodes                                         Cuts/
+   Node  Left     Objective  IInf  Best Integer     Best Node    ItCnt     Gap
+
+*     0+    0                            5.0000                     12     --- 
+      0     0        2.5000     7        5.0000        2.5000       12   50.00%
+*     0+    0                            3.0000        2.5000       12   16.67%
+      0     0        cutoff              3.0000        2.5000       12   16.67%
+MIP status(101): integer optimal solution
+Fixing integer variables, and solving final LP...
+Tried aggregator 1 time.
+LP Presolve eliminated 12 rows and 12 columns.
+All rows and columns eliminated.
+Presolve time =    0.00 sec.
+Fixed MIP status(1): optimal
+
+Proven optimal solution.
+
+MIP Solution:            3.000000    (12 iterations, 0 nodes)
+Final Solve:             3.000000    (0 iterations)
+
+Best possible:           3.000000
+Absolute gap:            0.000000
+Relative gap:            0.000000
+
+--- Restarting execution
+--- telecamereMod.gms(101) 2 Mb
+--- Reading solution for model local2
+--- telecamereMod.gms(101) 2 Mb
+--- Executing after solve: elapsed 0:00:00.371
+--- telecamereMod.gms(102) 3 Mb
+*** Status: Normal completion
+--- Job telecamereMod.gms Stop 11/22/16 19:00:00 elapsed 0:00:00.376

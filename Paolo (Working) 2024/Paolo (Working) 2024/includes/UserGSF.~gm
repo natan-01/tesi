@@ -1,0 +1,242 @@
+display "(2) aggregate SAM data to case-specific sectors / goods / Fin  "
+
+sets
+        mapPGood(Pgood,*)   !! Aggregates Panda goods into user specified goods
+        mapPSec(Psec,*)     !! Aggregates Panda sectors into user specified sectors
+        mapPFin(Pfin,*)     !! Aggregates factors and final demand into user specified factors and final demand
+        county                  !! counties used in disaggregated SAM
+        reg                     !! user case regions - built of counties
+        mapCMtoReg(*,*)         !! regionalisation key identified from key ID given in CaseData.gms
+*        mapSecGood(*,*)         !! maps sectors to goods (have 1-1 now)
+*** AW 29/9: the last mapping will vanish again - apparently we don't have a 1-1 mapping anymore (again)
+;
+
+alias
+   (good,gg,com)
+   (sec,ss)
+   (fin,ff,fin2,ff2)
+   (county,county2,cc)
+   (reg,rr,reg2,cnt)
+;
+
+$GDXIN AggKeys.gdx
+$LOAD mapPSec,mapPGood, mapPFin, mapCMtoReg
+
+$GDXIN AggCaseSets.gdx
+$LOAD good, sec, fin, reg
+
+parameters
+* goods / sector submatrices
+**       distrGoodUseSAM(good,sec) !! nation-wide usage pattern of commodity by sector (user case levels)
+       distrGoodSupplySAM(sec,good) !! nation-wide supply pattern of commodity by sector (user case levels)
+* submatrices, P.., mapped to user goods, sectors and Fin, national level
+       UGFN(good,fin)
+       USFN(sec,fin), UFGN(fin,good), UFSN(fin,sec), UFFN(fin,fin)
+       USGN(sec,good), UGSN(good,sec)
+       SAMnat(*,*)     !! aggregated 1-region SAM, unchecked for consistency
+* disaggregation keys - national to county to regional level
+       distrPCounty(*,*,*)   !! Distribution key from Panda to county levels - all data = whole .xlsx-sheet
+       distrPCountyProd(county,sec) !! supply disaggregation key mapped to user sectors
+       distrPCountyAnv(county,sec) !! usage disaggregation key mapped to user sectors
+       distrPCountyProdN(county,*),distrPCountyAnvN(county,*)    !! normalised distribution keys based on production and on usage (anvendelse)
+       distrPRegProdN(reg,sec) !! normalised supply disaggregation key mapped to user sectors and regions
+       distrGoodRegProdN(reg,good)  !! normalised supply disaggregation key mapped to user goods and regions
+       distrPRegAnvN(reg,sec) !! normalised usage disaggregation key mapped to user sectors
+       distrPCountyincome(county) !! income (consumption) disaggregation
+       distrPCountyincome_sec(county,sec) !! income (consumption) disaggregation
+       distrsecRegincomeN(reg,sec)  !! normalised supply disaggregation key mapped to user goods and regions
+       distrGoodRegincomeN(reg,good)  !! normalised supply disaggregation key mapped to user goods and regions
+       distrsec_public(reg,sec)  !! local public key
+       distrsec_local(reg,sec)  !! local public key
+       distrGood_public(reg,good)  !! local public key
+       distrGood_local(reg,good)  !! local public key
+       distrPCountyincomeN(county) !! normalised income (consumption) disaggregation
+       distrPRegincomeN(reg)        !! normalised income (consumption) aggregation mapped to regions
+       sumpsg(sec)       !! AW 16-12
+       ;
+
+* nation-wide pattern (ratio) of usage of commodities by sectors (both on user case level)
+*distrGoodUseSAM(good,sec) = sum((Pgood,Psec)$(mapPGood(Pgood,good) and mapPSec(Psec,sec)),PGS(Pgood,Psec)) / sum((Pgood,Psec)$mapPGood(Pgood,good),PGS(Pgood,Psec));
+* ... and of supply of commodities by sectors
+
+* AW 16/12
+sumpsg(sec)= sum((Psec,Pgood)$mapPSec(Psec,sec),PSG(Psec,Pgood));
+*display sumpsg;
+
+loop(sec,
+ if (sumpsg(sec),
+    distrGoodSupplySAM(sec,good)=  sum((Psec,Pgood)$(mapPGood(Pgood,good) and mapPSec(Psec,sec)),PSG(Psec,Pgood)) / sumpsg(sec);
+ else
+    distrGoodSupplySAM(sec,good) = 1/card(good);
+);
+  );
+
+*distrGoodSupplySAM(sec,good)=  sum((Psec,Pgood)$(mapPGood(Pgood,good) and mapPSec(Psec,sec)),PSG(Psec,Pgood)) / sum((Psec,Pgood)$mapPSec(Psec,sec),PSG(Psec,Pgood));
+
+
+
+*-------------------------------------------------------
+* convert SAM submatrices to user sectors & products & fin
+UGFN(good,fin)=sum((Pgood,Pfin)$(mapPGood(Pgood,good) and mapPFin(Pfin,fin)), PGF(Pgood,Pfin));
+USFN(sec,fin)=sum((Psec,Pfin)$(mapPSec(Psec,sec) and mapPFin(Pfin,fin)), PSF(Psec,Pfin));
+UFFN(ff,fin)=sum((p_ff,Pfin)$(mapPFin(p_ff,ff) and mapPFin(Pfin,fin)), PFF(p_ff,Pfin));
+UFGN(fin,good)=sum((Pfin,Pgood)$(mapPFin(Pfin,fin) and mapPGood(Pgood,good)), PFG(Pfin,Pgood));
+UFSN(fin,sec)=sum((Pfin,Psec)$(mapPFin(Pfin,fin) and mapPSec(Psec,sec)), PFS(Pfin,Psec));
+* USGN and UGSN are needed for composing the national SAM
+UGSN(good,sec)= sum((Pgood,Psec)$(mapPGood(Pgood,good) and mapPSec(Psec,sec)),PGS(Pgood,Psec));
+USGN(sec,good)= sum((Pgood,Psec)$(mapPSec(Psec,sec) and mapPGood(Pgood,good)),PSG(Psec,Pgood));
+
+* mapSecGood indicates whether good is supplied by sec
+* AW 2/12-14: CREEA data don't have a unique mapping / diagonal supply matrix
+* -> can have several mapSecGood = 1 for given sec or for given good
+* need distrGoodSupplySAM in addition (?)
+** AW 5/12: rewrote concerned parts, mapSecGood not needed anymore
+* mapSecGood(sec,good)$(USGN(sec,good))=1;
+*display mapSecGood;
+*execute_unload 'UserGSF.gdx' UGFN,UGSN,USGN, USFN, UFFN, UFGN, UFSN, mapSecGood, distrGoodSupplySAM;
+execute_unload 'UserGSF.gdx' UGFN,UGSN,USGN, USFN, UFFN, UFGN, UFSN, distrGoodSupplySAM;
+
+* determine county-/regional disaggregation and aggregation keys
+$GDXIN DisAgg.gdx
+$LOAD county,distrPCounty
+
+
+* map the keys for disaggregation to county level into user sectors and normalise
+** AW 16/10: don't need the normalised county versions anymore?
+* production in this county and sector
+distrPCountyProd(county,sec)=sum(Psec$mapPSec(Psec,sec),distrPCounty(county,Psec,"prod"));
+*distrPCountyProdN(county,sec) = distrPCountyProd(county,sec)/sum(cc, distrPCountyProd(cc,sec));
+* product usage in this county and sector
+distrPCountyAnv(county,sec) = sum(Psec$mapPSec(Psec,sec),distrPCounty(county,Psec,"tot_anv"));
+*distrPCountyAnvN(county,sec) = distrPCountyAnv(county,sec)/sum(cc, distrPCountyAnv(cc,sec));
+* income in this county
+* distrPCountyincome(county) = sum(Psec,distrPandaCounty(county,Psec,"income"));
+* AW 26/9-14: benytter konsum - ble dette riktig nå?
+distrPCountyincome(county) = sum(Psec,distrPCounty(county,Psec,"konsum_hush"))+ sum(Psec,distrPCounty(county,Psec,"konsum_stat"))+sum(Psec,distrPCounty(county,Psec,"konsum_komm"));
+distrPCountyincome_sec(county,sec) = sum(Psec$mapPSec(Psec,sec),distrPCounty(county,Psec,"konsum_hush"))+ sum(Psec$mapPSec(Psec,sec),distrPCounty(county,Psec,"konsum_stat"))+sum(Psec$mapPSec(Psec,sec),distrPCounty(county,Psec,"konsum_komm"));
+
+distrsec_public(reg,sec)=  sum((Psec,county)$(mapPSec(Psec,sec) and mapCMtoReg(county,reg)),distrPCounty(county,Psec,"konsum_stat"))     ;
+distrsec_local(reg,sec)=  sum((Psec,county)$(mapPSec(Psec,sec) and mapCMtoReg(county,reg)),distrPCounty(county,Psec,"konsum_komm"))     ;
+
+*distrPCountyincomeN(county) = distrPCountyincome(county)/sum(cc, distrPCountyincome(cc));
+
+
+
+display distrPCountyProd;
+
+
+loop(sec,
+     if(sum(cc, distrPCountyProd('99',sec)>0),
+            if ((distrPCountyProd('99',sec)/sum(cc, distrPCountyProd(cc,sec))<checktol),
+                    distrPCountyProd('99',sec)=0;
+             );
+     );
+
+);
+
+display "Mark 1"
+* normalise keys and map from county to regional level
+loop(sec,
+   if (sum(cc, distrPCountyProd(cc,sec)),
+     distrPRegProdN(reg,sec) = sum(county$mapCMtoReg(county,reg),distrPCountyProd(county,sec))/sum(cc, distrPCountyProd(cc,sec));
+   else
+     distrPRegProdN(reg,sec)=1/card(reg);
+    );
+   if (sum(cc,distrPCountyAnv(cc,sec)),
+      distrPRegAnvN(reg,sec) = sum(county$mapCMtoReg(county,reg),distrPCountyAnv(county,sec))/sum(cc, distrPCountyAnv(cc,sec));
+   else
+      distrPRegAnvN(reg,sec)=1/card(reg);
+   );
+);
+display distrPRegProdN, mapCMtoReg;
+display "Mark 2"
+* The reginalization with no sector dimension
+if(sum(cc,distrPCountyincome(cc)),
+   distrPRegincomeN(reg) = sum(county$mapCMtoReg(county,reg),distrPCountyincome(county))/sum(cc, distrPCountyincome(cc));
+else
+   distrPRegincomeN(reg)=1/card(reg);
+);
+
+display "Mark 3"
+
+loop(sec,
+   if(distrPCountyincome_sec('99',sec) <> 0,
+   if ((distrPCountyincome_sec('99',sec)/sum(cc, distrPCountyincome_sec(cc,sec))<checktol),
+           distrPCountyincome_sec('99',sec)=0;
+    );
+    );
+    );
+display "Mark 4"
+* normalise keys and map from county to regional level
+loop(sec,
+   if (sum(cc, distrPCountyincome_sec(cc,sec)),
+     distrsecRegincomeN(reg,sec) = sum(county$mapCMtoReg(county,reg),distrPCountyincome_sec(county,sec))/sum(cc, distrPCountyincome_sec(cc,sec));
+   else
+     distrsecRegincomeN(reg,sec)=1/card(reg);
+    );
+
+);
+display "Mark 5"
+
+* Go from sector to goods ************************************
+
+* AW 16/12
+parameter dgrp(good);
+dgrp(good)=sum((sec,reg2),distrPRegProdN(reg2,sec)*USGN(sec,good));
+
+loop(good,
+   if(dgrp(good),
+      distrGoodRegProdN(reg,good)=sum(sec,distrPRegProdN(reg,sec)*USGN(sec,good))/sum((sec,reg2),distrPRegProdN(reg2,sec)*USGN(sec,good));
+   else
+      distrGoodRegProdN(reg,good)=1/card(reg);
+   );
+);
+
+display "Mark 6"
+
+* UJ 01/02
+parameter dgrp_1(good);
+dgrp_1(good)=sum((sec,reg2),distrsecRegincomeN(reg2,sec)*USGN(sec,good));
+
+loop(good,
+   if(dgrp_1(good),
+      distrGoodRegincomeN(reg,good)=sum(sec,distrsecRegincomeN(reg,sec)*USGN(sec,good))/sum((sec,reg2),distrsecRegincomeN(reg2,sec)*USGN(sec,good));
+   else
+      distrGoodRegincomeN(reg,good)=1/card(reg);
+   );
+);
+
+
+execute_unload 'regional_share.gdx' distrPRegProdN, distrPRegAnvN, distrPRegincomeN, distrGoodRegincomeN;
+
+
+
+*UJ 22/03   Creating the share between public and local consumption
+parameter dgrp_2(good)
+distrgood_share_public(reg,good);
+
+
+dgrp_2(good)=sum((sec,reg2),(distrsec_public(reg2,sec)+ distrsec_local(reg2,sec))*USGN(sec,good));
+
+
+
+display   distrsec_public, distrsec_local;
+
+loop(good,
+   if(dgrp_2(good),
+      distrgood_public(reg,good)=sum(sec,distrsec_public(reg,sec)*USGN(sec,good));
+   );
+);
+
+
+loop(good,
+   if(dgrp_2(good),
+      distrgood_local(reg,good)=sum(sec,distrsec_local(reg,sec)*USGN(sec,good));
+   );
+);
+
+
+distrgood_share_public(reg,good)$(distrgood_public(reg,good) +  distrgood_local(reg,good))=  distrgood_public(reg,good)/(distrgood_public(reg,good) +  distrgood_local(reg,good));
+
+
+display distrgood_share_public;

@@ -1,0 +1,15 @@
+B 2 C o m p i l a t i o n
+B 67 Equation Listing    SOLVE Assist Using MIP From line 52
+D 68 cop
+D 80 obj
+B 89 Column Listing      SOLVE Assist Using MIP From line 52
+E 90 C
+E 118 z
+B 127 Model Statistics    SOLVE Assist Using MIP From line 52
+B 143 Solution Report     SOLVE Assist Using MIP From line 52
+F 179 cop
+F 191 obj
+G 192 C
+G 202 z
+B 215 E x e c u t i o n
+I 216 C

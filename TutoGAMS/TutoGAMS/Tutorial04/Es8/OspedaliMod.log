@@ -1,0 +1,53 @@
+
+--- Job OspedaliMod.gms Start 11/24/16 17:39:29 WEX-WEI 23.2.1 x86_64/MS Windows     
+GAMS Rev 232  Copyright (C) 1987-2009 GAMS Development. All rights reserved
+Licensee: Matematica, Statistica, Informatica e ApplicaziS091013:0751AN-WIN
+          Università degli Studi di Bergamo                          DC7952
+          License for teaching and research at degree granting institutions
+--- Starting compilation
+--- OspedaliMod.gms(50) 3 Mb
+--- Starting execution: elapsed 0:00:00.006
+--- OspedaliMod.gms(3) 4 Mb
+--- Generating MIP model Ospedali
+--- OspedaliMod.gms(48) 4 Mb
+---   8 rows  8 columns  29 non-zeroes
+---   7 discrete-columns
+--- OspedaliMod.gms(48) 4 Mb
+--- Executing CPLEX: elapsed 0:00:01.904
+--- OspedaliMod.gms(48) 4 Mb
+
+ILOG CPLEX       Aug 14, 2009 23.2.1 WEX 12361.12582 WEI x86_64/MS Windows
+Cplex 12.1.0, GAMS Link 34 
+
+Cplex MIP uses 1 of 4 parallel threads. Change default with option THREADS.
+Reading data...
+Starting Cplex...
+Tried aggregator 1 time.
+MIP Presolve eliminated 8 rows and 8 columns.
+All rows and columns eliminated.
+Presolve time =    0.00 sec.
+MIP status(101): integer optimal solution
+Fixing integer variables, and solving final LP...
+Tried aggregator 1 time.
+LP Presolve eliminated 8 rows and 8 columns.
+All rows and columns eliminated.
+Presolve time =    0.00 sec.
+Fixed MIP status(1): optimal
+
+Proven optimal solution.
+
+MIP Solution:            3.000000    (0 iterations, 0 nodes)
+Final Solve:             3.000000    (0 iterations)
+
+Best possible:           3.000000
+Absolute gap:            0.000000
+Relative gap:            0.000000
+
+--- Restarting execution
+--- OspedaliMod.gms(48) 2 Mb
+--- Reading solution for model Ospedali
+--- OspedaliMod.gms(48) 2 Mb
+--- Executing after solve: elapsed 0:00:02.034
+--- OspedaliMod.gms(50) 3 Mb
+*** Status: Normal completion
+--- Job OspedaliMod.gms Stop 11/24/16 17:39:31 elapsed 0:00:02.096

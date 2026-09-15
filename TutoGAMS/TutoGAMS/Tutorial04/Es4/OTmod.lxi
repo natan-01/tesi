@@ -1,0 +1,15 @@
+B 2 C o m p i l a t i o n
+B 92 Equation Listing    SOLVE OT Using MIP From line 80
+D 93 fo
+D 101 minreq
+B 118 Column Listing      SOLVE OT Using MIP From line 80
+E 119 x
+E 151 z
+B 160 Model Statistics    SOLVE OT Using MIP From line 80
+B 176 Solution Report     SOLVE OT Using MIP From line 80
+F 202 fo
+F 208 minreq
+G 215 x
+G 227 z
+B 238 E x e c u t i o n
+I 239 x

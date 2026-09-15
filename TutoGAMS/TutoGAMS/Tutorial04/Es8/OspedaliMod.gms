@@ -1,0 +1,50 @@
+option limrow=1000
+
+option mip=cplex;
+
+set citta /Latina,Lecce,Matera,Napoli,Potenza,Salerno,Roma/;
+alias(citta,citta1,citta2);
+$ontext
+E' necessario fare l'alias altrimenti GAMS prende la stessa citta da entrambe le parti. non crea un sottoinsieme del prodotto cartesiano.
+$offtext
+set vicini(citta1,citta2)
+/
+Latina.Latina
+Latina.Napoli
+Latina.Roma
+Lecce.Lecce
+Lecce.Matera
+Matera.Matera
+Matera.Lecce
+Matera.Potenza
+Napoli.Napoli
+Napoli.Latina
+Napoli.Potenza
+Napoli.Salerno
+Potenza.Potenza
+Potenza.Matera
+Potenza.Napoli
+Potenza.Salerno
+Salerno.Salerno
+Salerno.Napoli
+Salerno.Potenza
+Roma.Roma
+Roma.Latina
+/;
+
+binary variable ospedale(citta);
+variable z funzione obiettivo;
+
+equation fo, cover(citta);
+
+fo..
+         z=e=sum(citta,ospedale(citta));
+
+cover(citta1)..
+         sum(citta2$vicini(citta1,citta2),ospedale(citta2))=g=1;
+
+model Ospedali /all/;
+
+solve Ospedali using mip minimizing z;
+
+display ospedale.l;

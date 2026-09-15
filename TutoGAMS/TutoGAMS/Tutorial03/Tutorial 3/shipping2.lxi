@@ -1,0 +1,19 @@
+B 2 C o m p i l a t i o n
+B 66 Symbol Listing
+B 129 Include File Summary
+B 145 Equation Listing    SOLVE nomemodello Using LP From line 57
+D 146 obiettivo
+D 156 capmax
+D 166 dommin
+B 181 Column Listing      SOLVE nomemodello Using LP From line 57
+E 182 z
+E 190 x
+B 214 Model Statistics    SOLVE nomemodello Using LP From line 57
+B 230 Solution Report     SOLVE nomemodello Using LP From line 57
+F 256 obiettivo
+F 262 capmax
+F 269 dommin
+G 272 z
+G 276 x
+B 294 E x e c u t i o n
+I 295 x

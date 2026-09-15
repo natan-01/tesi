@@ -1,0 +1,19 @@
+[PROJECT]
+
+[RP:UNTITLED_1]
+1=
+
+[RP:TELECAMEREMOD]
+1=
+
+[OPENWINDOW_1]
+MAXIM=0
+TOP=3
+LEFT=-2
+HEIGHT=700
+WIDTH=972
+
+[MRUFILES]
+1=C:\Users\pisciella\Dropbox\CORSO Ricerca Operativa\GAMS tutorial\Tutorial 4\Es16\telecamereMod.lst
+2=C:\Users\pisciella\Dropbox\CORSO Ricerca Operativa\GAMS tutorial\Tutorial 4\Es16\telecamereMod.gms
+3=C:\Users\pisciella\Dropbox\CORSO Ricerca Operativa\GAMS tutorial\Tutorial 4\Es16\Untitled_1.gms

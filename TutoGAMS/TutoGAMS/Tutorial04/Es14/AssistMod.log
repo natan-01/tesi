@@ -1,0 +1,73 @@
+
+--- Job AssistMod.gms Start 11/22/16 18:21:08 WEX-WEI 23.2.1 x86_64/MS Windows     
+GAMS Rev 232  Copyright (C) 1987-2009 GAMS Development. All rights reserved
+Licensee: Matematica, Statistica, Informatica e ApplicaziS091013:0751AN-WIN
+          Università degli Studi di Bergamo                          DC7952
+          License for teaching and research at degree granting institutions
+--- Starting compilation
+--- AssistMod.gms(55) 3 Mb
+--- Starting execution: elapsed 0:00:00.007
+--- AssistMod.gms(1) 4 Mb
+--- Generating MIP model Assist
+--- AssistMod.gms(52) 4 Mb
+---   10 rows  6 columns  24 non-zeroes
+---   5 discrete-columns
+--- AssistMod.gms(52) 4 Mb
+--- Executing CPLEX: elapsed 0:00:00.012
+--- AssistMod.gms(52) 4 Mb
+
+ILOG CPLEX       Aug 14, 2009 23.2.1 WEX 12361.12582 WEI x86_64/MS Windows
+Cplex 12.1.0, GAMS Link 34 
+
+Cplex MIP uses 1 of 4 parallel threads. Change default with option THREADS.
+Reading data...
+Starting Cplex...
+Tried aggregator 1 time.
+MIP Presolve eliminated 6 rows and 2 columns.
+MIP Presolve modified 2 coefficients.
+Reduced MIP has 4 rows, 4 columns, and 8 nonzeros.
+Reduced MIP has 4 binaries, 0 generals, 0 SOSs, and 0 indicators.
+Presolve time =    0.01 sec.
+Clique table members: 4.
+MIP emphasis: balance optimality and feasibility.
+MIP search method: dynamic search.
+Parallel mode: none, using 1 thread.
+Tried aggregator 1 time.
+No LP presolve or aggregator reductions.
+Presolve time =    0.00 sec.
+
+Iteration      Dual Objective            In Variable           Out Variable
+     1             220.000000                   C(A)          cop(a1) slack
+     2             295.000000                   C(C)          cop(a3) slack
+Root relaxation solution time =    0.00 sec.
+
+        Nodes                                         Cuts/
+   Node  Left     Objective  IInf  Best Integer     Best Node    ItCnt     Gap
+
+*     0+    0                          420.0000                      2     --- 
+*     0     0      integral     0      295.0000      295.0000        2    0.00%
+MIP status(101): integer optimal solution
+Fixing integer variables, and solving final LP...
+Tried aggregator 1 time.
+LP Presolve eliminated 10 rows and 6 columns.
+All rows and columns eliminated.
+Presolve time =    0.00 sec.
+Fixed MIP status(1): optimal
+
+Proven optimal solution.
+
+MIP Solution:          295.000000    (2 iterations, 0 nodes)
+Final Solve:           295.000000    (0 iterations)
+
+Best possible:         295.000000
+Absolute gap:            0.000000
+Relative gap:            0.000000
+
+--- Restarting execution
+--- AssistMod.gms(52) 2 Mb
+--- Reading solution for model Assist
+--- AssistMod.gms(52) 2 Mb
+--- Executing after solve: elapsed 0:00:00.098
+--- AssistMod.gms(54) 3 Mb
+*** Status: Normal completion
+--- Job AssistMod.gms Stop 11/22/16 18:21:09 elapsed 0:00:00.102

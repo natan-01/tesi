@@ -1,0 +1,15 @@
+B 2 C o m p i l a t i o n
+B 59 Equation Listing    SOLVE Ospedali Using MIP From line 48
+D 60 fo
+D 70 cover
+B 102 Column Listing      SOLVE Ospedali Using MIP From line 48
+E 103 ospedale
+E 128 z
+B 137 Model Statistics    SOLVE Ospedali Using MIP From line 48
+B 153 Solution Report     SOLVE Ospedali Using MIP From line 48
+F 187 fo
+F 193 cover
+G 200 ospedale
+G 212 z
+B 225 E x e c u t i o n
+I 226 ospedale

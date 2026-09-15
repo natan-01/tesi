@@ -1,0 +1,91 @@
+
+--- Job StabilimentiMdo.gms Start 11/24/16 18:08:21 WEX-WEI 23.2.1 x86_64/MS Windows     
+GAMS Rev 232  Copyright (C) 1987-2009 GAMS Development. All rights reserved
+Licensee: Matematica, Statistica, Informatica e ApplicaziS091013:0751AN-WIN
+          Università degli Studi di Bergamo                          DC7952
+          License for teaching and research at degree granting institutions
+--- Starting compilation
+--- StabilimentiMdo.gms(73) 3 Mb
+--- Starting execution: elapsed 0:00:00.005
+--- StabilimentiMdo.gms(66) 4 Mb
+--- Generating MIP model Stabil
+--- StabilimentiMdo.gms(67) 4 Mb
+---   8 rows  16 columns  43 non-zeroes
+---   3 discrete-columns
+--- StabilimentiMdo.gms(67) 4 Mb
+--- Executing CPLEX: elapsed 0:00:00.011
+--- StabilimentiMdo.gms(67) 4 Mb
+
+ILOG CPLEX       Aug 14, 2009 23.2.1 WEX 12361.12582 WEI x86_64/MS Windows
+Cplex 12.1.0, GAMS Link 34 
+
+Cplex MIP uses 1 of 4 parallel threads. Change default with option THREADS.
+Reading data...
+Starting Cplex...
+Tried aggregator 1 time.
+MIP Presolve eliminated 1 rows and 1 columns.
+Reduced MIP has 7 rows, 15 columns, and 27 nonzeros.
+Reduced MIP has 3 binaries, 0 generals, 0 SOSs, and 0 indicators.
+Presolve time =    0.02 sec.
+MIP emphasis: balance optimality and feasibility.
+MIP search method: dynamic search.
+Parallel mode: none, using 1 thread.
+Tried aggregator 1 time.
+No LP presolve or aggregator reductions.
+Presolve time =    0.00 sec.
+
+Iteration      Dual Objective            In Variable           Out Variable
+     1           16000.000000       trasporto(s1.p2)          dom(p2) slack
+     2           25000.000000       trasporto(s1.p4)          dom(p4) slack
+     3           27000.000000       trasporto(s1.p3)          dom(p3) slack
+     4           30000.000000       trasporto(s1.p1)          dom(p1) slack
+     5           41071.428571        attivazione(s1)          cap(s1) slack
+     6           42357.142857       trasporto(s2.p1)          cap(s2) slack
+     7           43500.000000       trasporto(s3.p2)          cap(s3) slack
+     8           45222.222222        attivazione(s2)        attivazione(s1)
+     9           45222.222222       trasporto(s2.p4)       trasporto(s1.p1)
+Root relaxation solution time =    0.01 sec.
+
+        Nodes                                         Cuts/
+   Node  Left     Objective  IInf  Best Integer     Best Node    ItCnt     Gap
+
+      0     0    45222.2222     1                  45222.2222        9         
+*     0+    0                        49500.0000    45222.2222        9    8.64%
+      0     0        cutoff          49500.0000                      9    0.00%
+
+Implied bound cuts applied:  2
+Flow cuts applied:  1
+Gomory fractional cuts applied:  1
+MIP status(101): integer optimal solution
+Fixing integer variables, and solving final LP...
+Tried aggregator 1 time.
+LP Presolve eliminated 2 rows and 8 columns.
+Reduced LP has 6 rows, 8 columns, and 16 nonzeros.
+Presolve time =    0.00 sec.
+
+Iteration      Dual Objective            In Variable           Out Variable
+     1           32000.000000       trasporto(s1.p2)          dom(p2) slack
+     2           41000.000000       trasporto(s1.p4)          dom(p4) slack
+     3           43000.000000       trasporto(s1.p3)          dom(p3) slack
+     4           46000.000000       trasporto(s1.p1)          dom(p1) slack
+     5           49500.000000       trasporto(s2.p4)          cap(s1) slack
+     6           49500.000000       trasporto(s2.p1)       trasporto(s1.p4)
+Fixed MIP status(1): optimal
+
+Proven optimal solution.
+
+MIP Solution:        49500.000000    (9 iterations, 0 nodes)
+Final Solve:         49500.000000    (6 iterations)
+
+Best possible:       49500.000000
+Absolute gap:            0.000000
+Relative gap:            0.000000
+
+--- Restarting execution
+--- StabilimentiMdo.gms(67) 2 Mb
+--- Reading solution for model Stabil
+--- StabilimentiMdo.gms(67) 2 Mb
+--- Executing after solve: elapsed 0:00:00.107
+--- StabilimentiMdo.gms(73) 3 Mb
+*** Status: Normal completion
+--- Job StabilimentiMdo.gms Stop 11/24/16 18:08:22 elapsed 0:00:00.110

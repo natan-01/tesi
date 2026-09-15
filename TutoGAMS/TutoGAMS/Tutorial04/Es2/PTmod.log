@@ -1,0 +1,43 @@
+
+--- Job PTmod.gms Start 11/24/16 16:48:47 WEX-WEI 23.2.1 x86_64/MS Windows     
+GAMS Rev 232  Copyright (C) 1987-2009 GAMS Development. All rights reserved
+Licensee: Matematica, Statistica, Informatica e ApplicaziS091013:0751AN-WIN
+          Università degli Studi di Bergamo                          DC7952
+          License for teaching and research at degree granting institutions
+--- Starting compilation
+--- PTmod.gms(48) 3 Mb
+--- Starting execution: elapsed 0:00:00.007
+--- PTmod.gms(29) 4 Mb
+--- Generating LP model PT
+--- PTmod.gms(46) 4 Mb
+---   4 rows  6 columns  19 non-zeroes
+--- PTmod.gms(46) 4 Mb
+--- Executing CPLEX: elapsed 0:00:00.012
+--- PTmod.gms(46) 4 Mb
+
+ILOG CPLEX       Aug 14, 2009 23.2.1 WEX 12361.12582 WEI x86_64/MS Windows
+Cplex 12.1.0, GAMS Link 34 
+
+Reading data...
+Starting Cplex...
+Tried aggregator 1 time.
+LP Presolve eliminated 1 rows and 1 columns.
+Reduced LP has 3 rows, 5 columns, and 13 nonzeros.
+Presolve time =    0.00 sec.
+Initializing dual steep norms . . .
+
+Iteration      Dual Objective            In Variable           Out Variable
+     1            1820.000000           x(camminare)    percentaperto slack
+LP status(1): optimal
+
+Optimal solution found.
+Objective :        1820.000000
+
+--- Restarting execution
+--- PTmod.gms(46) 2 Mb
+--- Reading solution for model PT
+--- PTmod.gms(46) 2 Mb
+--- Executing after solve: elapsed 0:00:00.114
+--- PTmod.gms(48) 3 Mb
+*** Status: Normal completion
+--- Job PTmod.gms Stop 11/24/16 16:48:48 elapsed 0:00:00.119

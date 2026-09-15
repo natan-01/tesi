@@ -1,0 +1,26 @@
+[PROJECT]
+
+[RP:UNTITLED_1]
+1=
+
+[OPENWINDOW_1]
+MAXIM=0
+TOP=3
+LEFT=0
+HEIGHT=700
+WIDTH=1532
+
+[RP:FILBANKMOD]
+1=
+
+[RP:OSPEDALIMOD]
+1=
+
+[RP:STABILIMENTIMDO]
+1=
+
+[MRUFILES]
+1=C:\Users\pisciella\Dropbox\CORSO Ricerca Operativa\GAMS tutorial\Tutorial 4\Es9\StabilimentiMdo.gms
+2=C:\Users\pisciella\Dropbox\CORSO Ricerca Operativa\GAMS tutorial\Tutorial 4\Es8\OspedaliMod.lst
+3=C:\Users\pisciella\Dropbox\CORSO Ricerca Operativa\GAMS tutorial\Tutorial 4\Es8\OspedaliMod.gms
+4=C:\Users\pisciella\Dropbox\CORSO Ricerca Operativa\GAMS tutorial\Tutorial 4\Es8\Untitled_1.gms

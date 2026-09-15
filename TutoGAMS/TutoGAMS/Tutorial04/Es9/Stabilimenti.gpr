@@ -1,0 +1,19 @@
+[PROJECT]
+
+[RP:UNTITLED_1]
+1=
+
+[RP:STABILIMENTIMDO]
+1=
+
+[OPENWINDOW_1]
+MAXIM=0
+TOP=-8
+LEFT=-2
+HEIGHT=711
+WIDTH=1517
+
+[MRUFILES]
+1=C:\Users\pisciella\Dropbox\CORSO Ricerca Operativa\GAMS tutorial\Tutorial 4\Es9\StabilimentiMdo.lst
+2=C:\Users\pisciella\Dropbox\CORSO Ricerca Operativa\GAMS tutorial\Tutorial 4\Es9\StabilimentiMdo.gms
+3=C:\Users\pisciella\Dropbox\CORSO Ricerca Operativa\GAMS tutorial\Tutorial 4\Es9\Untitled_1.gms

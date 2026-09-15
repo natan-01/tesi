@@ -1,0 +1,41 @@
+[PROJECT]
+
+[RP:UNTITLED_2]
+1=
+
+[RP:MEDIACONDDATA]
+1=
+
+[RP:SHIPPING2]
+1=
+
+[RP:BLEND]
+1=
+
+[RP:LRGCGE]
+1=
+
+[RP:WHOUSE]
+1=
+
+[RP:MEDIACOND]
+1=
+
+[MRUFILES]
+1=C:\Users\pisciella\Dropbox\CORSO Ricerca Operativa\GAMS tutorial\Tutorial 4\MediaCond\MediaCond.lst
+2=C:\Users\pisciella\Documents\Implementazioni\proveRO\whouse.gms
+3=C:\Users\pisciella\Documents\Implementazioni\proveRO\MediaCondData.gms
+4=C:\Users\pisciella\Documents\Implementazioni\proveRO\MediaCond.lst
+5=C:\Users\pisciella\Documents\Implementazioni\proveRO\MediaCond.gms
+6=C:\Users\pisciella\Documents\Implementazioni\proveRO\lrgcge.gms
+7=C:\Users\pisciella\Documents\Implementazioni\proveRO\blend.gms
+8=C:\Users\pisciella\Documents\Implementazioni\proveRO\MediaCondData.lst
+
+[OPENWINDOW_1]
+FILE0=C:\Users\pisciella\Dropbox\CORSO Ricerca Operativa\GAMS tutorial\Tutorial 4\MediaCond\MediaCond.gms
+FILE1=C:\Users\pisciella\Dropbox\CORSO Ricerca Operativa\GAMS tutorial\Tutorial 4\MediaCond\MediaCond.gms
+MAXIM=0
+TOP=-8
+LEFT=-2
+HEIGHT=711
+WIDTH=1000

@@ -1,0 +1,238 @@
+GAMS Rev 232  WEX-WEI 23.2.1 x86_64/MS Windows          11/22/16 18:21:08 Page 1
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+C o m p i l a t i o n
+
+
+   1  option mip=cplex;
+   2   
+   3  set localizzazioni /A,B,C,D,E/
+   4   
+   5  set strade /a1,a2,a3,a4,a5,a6,a7,a8,a9/
+   6   
+   7  parameter costoLoc(localizzazioni)
+   8  /
+   9  A=100
+  10  B=75
+  11  C=120
+  12  D=125
+  13  E=95
+  14  /;
+  15   
+  16   
+  17  set copertura(localizzazioni,strade)
+  18  /
+  19  A.a1
+  20  A.a2
+  21  B.a2
+  22  B.a3
+  23  B.a4
+  24  B.a5
+  25  B.a6
+  26  C.a3
+  27  C.a4
+  28  C.a5
+  29  C.a9
+  30  D.a6
+  31  D.a7
+  32  D.a8
+  33  E.a1
+  34  E.a4
+  35  E.a5
+  36  E.a9
+  37  /;
+  38   
+  39  binary variable C(localizzazioni);
+  40  variable z fo;
+  41   
+  42  equation cop(strade);
+  43  cop(strade)..
+  44           sum(localizzazioni$copertura(localizzazioni,strade),C(localizzazi
+      oni))=g=1;
+  45   
+  46  equation obj;
+  47  obj..
+  48           z=e=sum(localizzazioni,costoLoc(localizzazioni)*C(localizzazioni)
+      );
+  49   
+  50  model Assist /all/;
+  51   
+  52  solve Assist using mip minimizing z;
+  53   
+  54  display C.l;
+  55   
+
+
+COMPILATION TIME     =        0.000 SECONDS      3 Mb  WEX232-232 Aug 11, 2009
+GAMS Rev 232  WEX-WEI 23.2.1 x86_64/MS Windows          11/22/16 18:21:08 Page 2
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Equation Listing    SOLVE Assist Using MIP From line 52
+
+
+---- cop  =G=  
+
+cop(a1)..  C(A) + C(E) =G= 1 ; (LHS = 0, INFES = 1 ****)
+     
+cop(a2)..  C(A) + C(B) =G= 1 ; (LHS = 0, INFES = 1 ****)
+     
+cop(a3)..  C(B) + C(C) =G= 1 ; (LHS = 0, INFES = 1 ****)
+     
+REMAINING 6 ENTRIES SKIPPED
+
+
+---- obj  =E=  
+
+obj..  - 100*C(A) - 75*C(B) - 120*C(C) - 125*C(D) - 95*C(E) + z =E= 0 ;
+     
+      (LHS = 0)
+     
+GAMS Rev 232  WEX-WEI 23.2.1 x86_64/MS Windows          11/22/16 18:21:08 Page 3
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Column Listing      SOLVE Assist Using MIP From line 52
+
+
+---- C  
+
+C(A)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+        1       cop(a1)
+        1       cop(a2)
+     -100       obj
+
+C(B)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+        1       cop(a2)
+        1       cop(a3)
+        1       cop(a4)
+        1       cop(a5)
+        1       cop(a6)
+      -75       obj
+
+C(C)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+        1       cop(a3)
+        1       cop(a4)
+        1       cop(a5)
+        1       cop(a9)
+     -120       obj
+
+REMAINING 2 ENTRIES SKIPPED
+
+---- z  fo
+
+z
+                (.LO, .L, .UP, .M = -INF, 0, +INF, 0)
+        1       obj
+
+GAMS Rev 232  WEX-WEI 23.2.1 x86_64/MS Windows          11/22/16 18:21:08 Page 4
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Model Statistics    SOLVE Assist Using MIP From line 52
+
+
+MODEL STATISTICS
+
+BLOCKS OF EQUATIONS           2     SINGLE EQUATIONS           10
+BLOCKS OF VARIABLES           2     SINGLE VARIABLES            6
+NON ZERO ELEMENTS            24     DISCRETE VARIABLES          5
+
+
+GENERATION TIME      =        0.000 SECONDS      4 Mb  WEX232-232 Aug 11, 2009
+
+
+EXECUTION TIME       =        0.000 SECONDS      4 Mb  WEX232-232 Aug 11, 2009
+GAMS Rev 232  WEX-WEI 23.2.1 x86_64/MS Windows          11/22/16 18:21:08 Page 5
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Solution Report     SOLVE Assist Using MIP From line 52
+
+
+               S O L V E      S U M M A R Y
+
+     MODEL   Assist              OBJECTIVE  z
+     TYPE    MIP                 DIRECTION  MINIMIZE
+     SOLVER  CPLEX               FROM LINE  52
+
+**** SOLVER STATUS     1 Normal Completion         
+**** MODEL STATUS      1 Optimal                   
+**** OBJECTIVE VALUE              295.0000
+
+ RESOURCE USAGE, LIMIT          0.031      1000.000
+ ITERATION COUNT, LIMIT         2    2000000000
+
+ILOG CPLEX       Aug 14, 2009 23.2.1 WEX 12361.12582 WEI x86_64/MS Windows
+Cplex 12.1.0, GAMS Link 34 
+
+Cplex MIP uses 1 of 4 parallel threads. Change default with option THREADS.
+MIP status(101): integer optimal solution
+Fixed MIP status(1): optimal
+Proven optimal solution.
+
+MIP Solution:          295.000000    (2 iterations, 0 nodes)
+Final Solve:           295.000000    (0 iterations)
+
+Best possible:         295.000000
+Absolute gap:            0.000000
+Relative gap:            0.000000
+
+
+---- EQU cop  
+
+      LOWER     LEVEL     UPPER    MARGINAL
+
+a1     1.000     1.000     +INF       .         
+a2     1.000     1.000     +INF       .         
+a3     1.000     1.000     +INF       .         
+a4     1.000     2.000     +INF       .         
+a5     1.000     2.000     +INF       .         
+a6     1.000     2.000     +INF       .         
+a7     1.000     1.000     +INF       .         
+a8     1.000     1.000     +INF       .         
+a9     1.000     1.000     +INF       .         
+
+                       LOWER     LEVEL     UPPER    MARGINAL
+
+---- EQU obj             .         .         .        1.000      
+
+---- VAR C  
+
+     LOWER     LEVEL     UPPER    MARGINAL
+
+A      .         .        1.000   100.000      
+B      .        1.000     1.000    75.000      
+C      .         .        1.000   120.000      
+D      .        1.000     1.000   125.000      
+E      .        1.000     1.000    95.000      
+
+                       LOWER     LEVEL     UPPER    MARGINAL
+
+---- VAR z              -INF    295.000     +INF       .         
+
+  z  fo
+
+
+**** REPORT SUMMARY :        0     NONOPT
+                             0 INFEASIBLE
+                             0  UNBOUNDED
+GAMS Rev 232  WEX-WEI 23.2.1 x86_64/MS Windows          11/22/16 18:21:08 Page 6
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+E x e c u t i o n
+
+
+----     54 VARIABLE C.L  
+
+B 1.000,    D 1.000,    E 1.000
+
+
+
+EXECUTION TIME       =        0.000 SECONDS      3 Mb  WEX232-232 Aug 11, 2009
+
+
+USER: Matematica, Statistica, Informatica e ApplicaziS091013:0751AN-WIN
+      Università degli Studi di Bergamo                          DC7952
+      License for teaching and research at degree granting institutions
+
+
+**** FILE SUMMARY
+
+Input      C:\Users\pisciella\Dropbox\CORSO Ricerca Operativa\GAMS tutorial\Tuto
+           rial 4\Es14\AssistMod.gms
+Output     C:\Users\pisciella\Dropbox\CORSO Ricerca Operativa\GAMS tutorial\Tuto
+           rial 4\Es14\AssistMod.lst

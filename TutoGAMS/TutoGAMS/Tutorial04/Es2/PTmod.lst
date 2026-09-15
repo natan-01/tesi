@@ -1,0 +1,215 @@
+GAMS Rev 232  WEX-WEI 23.2.1 x86_64/MS Windows          11/24/16 16:48:47 Page 1
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+C o m p i l a t i o n
+
+
+   1  option lp=cplex;
+   2   
+   3  set attivita /camminare,jogging,nuoto,ginnastica,bicicletta/;
+   4  set allaperto(attivita) / camminare,jogging,bicicletta/;
+   5   
+   6   
+   7  parameter calorie(attivita)
+   8  /
+   9  camminare=100
+  10  jogging =300
+  11  nuoto=200
+  12  ginnastica=250
+  13  bicicletta=150
+  14  /;
+  15   
+  16  parameter maxore(attivita)
+  17  /
+  18  camminare=6
+  19  jogging =3
+  20  nuoto=0.8
+  21  ginnastica=3
+  22  bicicletta=5
+  23  /;
+  24   
+  25  equation fo, oretot, percentaperto,minaperto;
+  26  positive variable x(attivita);
+  27  variable z;
+  28   
+  29  x.up(attivita)=maxore(attivita);
+  30   
+  31  fo..
+  32           z=e=sum(attivita,calorie(attivita)*x(attivita));
+  33   
+  34  minaperto..
+  35           sum(attivita$allaperto(attivita),x(attivita))=g=2;
+  36   
+  37   
+  38  oretot..
+  39           sum(attivita,x(attivita))=e=8;
+  40   
+  41  percentaperto..
+  42           sum(attivita$allaperto(attivita),calorie(attivita)*x(attivita))=l
+      =0.5*sum(attivita,calorie(attivita)*x(attivita));
+  43   
+  44  model PT /all/;
+  45   
+  46  solve PT using lp maximizing z;
+  47   
+  48  display x.l;
+
+
+COMPILATION TIME     =        0.000 SECONDS      3 Mb  WEX232-232 Aug 11, 2009
+GAMS Rev 232  WEX-WEI 23.2.1 x86_64/MS Windows          11/24/16 16:48:47 Page 2
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Equation Listing    SOLVE PT Using LP From line 46
+
+
+---- fo  =E=  
+
+fo..  - 100*x(camminare) - 300*x(jogging) - 200*x(nuoto) - 250*x(ginnastica)
+     
+      - 150*x(bicicletta) + z =E= 0 ; (LHS = 0)
+     
+
+---- oretot  =E=  
+
+oretot..  x(camminare) + x(jogging) + x(nuoto) + x(ginnastica) + x(bicicletta)
+      =E= 8 ; (LHS = 0, INFES = 8 ****)
+     
+
+---- percentaperto  =L=  
+
+percentaperto..  50*x(camminare) + 150*x(jogging) - 100*x(nuoto)
+     
+      - 125*x(ginnastica) + 75*x(bicicletta) =L= 0 ; (LHS = 0)
+     
+
+---- minaperto  =G=  
+
+minaperto..  x(camminare) + x(jogging) + x(bicicletta) =G= 2 ;
+     
+      (LHS = 0, INFES = 2 ****)
+     
+GAMS Rev 232  WEX-WEI 23.2.1 x86_64/MS Windows          11/24/16 16:48:47 Page 3
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Column Listing      SOLVE PT Using LP From line 46
+
+
+---- x  
+
+x(camminare)
+                (.LO, .L, .UP, .M = 0, 0, 6, 0)
+     -100       fo
+        1       oretot
+       50       percentaperto
+        1       minaperto
+
+x(jogging)
+                (.LO, .L, .UP, .M = 0, 0, 3, 0)
+     -300       fo
+        1       oretot
+      150       percentaperto
+        1       minaperto
+
+x(nuoto)
+                (.LO, .L, .UP, .M = 0, 0, 0.8, 0)
+     -200       fo
+        1       oretot
+     -100       percentaperto
+
+REMAINING 2 ENTRIES SKIPPED
+
+---- z  
+
+z
+                (.LO, .L, .UP, .M = -INF, 0, +INF, 0)
+        1       fo
+
+GAMS Rev 232  WEX-WEI 23.2.1 x86_64/MS Windows          11/24/16 16:48:47 Page 4
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Model Statistics    SOLVE PT Using LP From line 46
+
+
+MODEL STATISTICS
+
+BLOCKS OF EQUATIONS           4     SINGLE EQUATIONS            4
+BLOCKS OF VARIABLES           2     SINGLE VARIABLES            6
+NON ZERO ELEMENTS            19
+
+
+GENERATION TIME      =        0.015 SECONDS      4 Mb  WEX232-232 Aug 11, 2009
+
+
+EXECUTION TIME       =        0.015 SECONDS      4 Mb  WEX232-232 Aug 11, 2009
+GAMS Rev 232  WEX-WEI 23.2.1 x86_64/MS Windows          11/24/16 16:48:47 Page 5
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Solution Report     SOLVE PT Using LP From line 46
+
+
+               S O L V E      S U M M A R Y
+
+     MODEL   PT                  OBJECTIVE  z
+     TYPE    LP                  DIRECTION  MAXIMIZE
+     SOLVER  CPLEX               FROM LINE  46
+
+**** SOLVER STATUS     1 Normal Completion         
+**** MODEL STATUS      1 Optimal                   
+**** OBJECTIVE VALUE             1820.0000
+
+ RESOURCE USAGE, LIMIT          0.030      1000.000
+ ITERATION COUNT, LIMIT         1    2000000000
+
+ILOG CPLEX       Aug 14, 2009 23.2.1 WEX 12361.12582 WEI x86_64/MS Windows
+Cplex 12.1.0, GAMS Link 34 
+
+LP status(1): optimal
+Optimal solution found.
+Objective :        1820.000000
+
+
+                       LOWER     LEVEL     UPPER    MARGINAL
+
+---- EQU fo              .         .         .        1.000      
+---- EQU oretot         8.000     8.000     8.000 -2.13E-14      
+---- EQU percentap~     -INF       .         .        2.000      
+---- EQU minaperto      2.000     4.200     +INF       .         
+
+---- VAR x  
+
+              LOWER     LEVEL     UPPER    MARGINAL
+
+camminare       .        1.750     6.000      .         
+jogging         .        2.450     3.000      .         
+nuoto           .        0.800     0.800   400.000      
+ginnastica      .        3.000     3.000   500.000      
+bicicletta      .         .        5.000 2.842E-14      
+
+                       LOWER     LEVEL     UPPER    MARGINAL
+
+---- VAR z              -INF   1820.000     +INF       .         
+
+
+**** REPORT SUMMARY :        0     NONOPT
+                             0 INFEASIBLE
+                             0  UNBOUNDED
+GAMS Rev 232  WEX-WEI 23.2.1 x86_64/MS Windows          11/24/16 16:48:47 Page 6
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+E x e c u t i o n
+
+
+----     48 VARIABLE x.L  
+
+camminare  1.750,    jogging    2.450,    nuoto      0.800,    ginnastica 3.000
+
+
+
+EXECUTION TIME       =        0.000 SECONDS      3 Mb  WEX232-232 Aug 11, 2009
+
+
+USER: Matematica, Statistica, Informatica e ApplicaziS091013:0751AN-WIN
+      Università degli Studi di Bergamo                          DC7952
+      License for teaching and research at degree granting institutions
+
+
+**** FILE SUMMARY
+
+Input      C:\Users\pisciella\Dropbox\CORSO Ricerca Operativa\GAMS tutorial\Tuto
+           rial 4\Es2\PTmod.gms
+Output     C:\Users\pisciella\Dropbox\CORSO Ricerca Operativa\GAMS tutorial\Tuto
+           rial 4\Es2\PTmod.lst

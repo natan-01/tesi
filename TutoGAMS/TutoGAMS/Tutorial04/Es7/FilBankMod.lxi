@@ -1,0 +1,21 @@
+B 2 C o m p i l a t i o n
+B 88 Equation Listing    SOLVE FilBank Using MIP From line 73
+D 89 budgetc
+D 97 minfiliali1
+D 102 minfiliali2
+D 107 maxfiliali
+D 112 fo
+B 121 Column Listing      SOLVE FilBank Using MIP From line 73
+E 122 x
+E 144 z
+B 153 Model Statistics    SOLVE FilBank Using MIP From line 73
+B 169 Solution Report     SOLVE FilBank Using MIP From line 73
+F 203 budgetc
+F 209 minfiliali1
+F 215 minfiliali2
+F 221 maxfiliali
+F 225 fo
+G 226 x
+G 240 z
+B 253 E x e c u t i o n
+I 254 x

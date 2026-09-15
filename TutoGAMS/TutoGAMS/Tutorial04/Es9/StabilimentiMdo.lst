@@ -1,0 +1,330 @@
+GAMS Rev 232  WEX-WEI 23.2.1 x86_64/MS Windows          11/24/16 18:08:21 Page 1
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+C o m p i l a t i o n
+
+
+   1  option mip=cplex;
+   2   
+   3  set stabilimenti /s1,s2,s3/;
+   4  set retail /p1,p2,p3,p4/;
+   5   
+   6  parameter costo_attivazione(stabilimenti)
+   7  /
+   8  s1=9000
+   9  s2=7000
+  10  s3=8000
+  11  /;
+  12   
+  13  parameter domanda(retail)
+  14  /
+  15  p1=150
+  16  p2=400
+  17  p3=200
+  18  p4=300
+  19  /;
+  20   
+  21  parameter costo_trasporto(stabilimenti,retail)
+  22  /
+  23  s1.p1=20
+  24  s1.p2=40
+  25  s1.p3=10
+  26  s1.p4=30
+  27  s2.p1=30
+  28  s2.p2=60
+  29  s2.p3=50
+  30  s2.p4=40
+  31  s3.p1=40
+  32  s3.p2=50
+  33  s3.p3=60
+  34  s3.p4=70
+  35  /;
+  36   
+  37   
+  38  parameter capacita(stabilimenti)
+  39  /
+  40  s1=700
+  41  s2=900
+  42  s3=800
+  43  /;
+  44   
+  45   
+  46  equation fo,dom(retail),cap(stabilimenti);
+  47   
+  48  positive variable trasporto(stabilimenti,retail);
+  49  binary variable attivazione(stabilimenti);
+  50  variable z fo;
+  51   
+  52  trasporto.up(stabilimenti,retail)=900;
+  53   
+  54  fo..
+  55           z=e=
+  56     sum((retail,stabilimenti), costo_trasporto(stabilimenti,retail)*traspor
+      to(stabilimenti,retail))
+  57   + sum(stabilimenti,costo_attivazione(stabilimenti)* attivazione(stabilime
+      nti));
+  58   
+  59  cap(stabilimenti)..
+  60           sum(retail,trasporto(stabilimenti,retail))=l=capacita(stabiliment
+      i)*attivazione(stabilimenti);
+  61   
+  62  dom(retail)..
+  63           sum(stabilimenti,trasporto(stabilimenti,retail))=g=domanda(retail
+      );
+  64   
+  65  model Stabil /all/;
+  66  Stabil.optcr=0;
+  67  solve Stabil using mip minimizing z;
+  68  display attivazione.l, trasporto.l;
+  69   
+  70  parameter utilizzo(stabilimenti);
+  71  utilizzo(stabilimenti)=sum(retail,trasporto.l(stabilimenti,retail));
+  72   
+  73  display utilizzo;
+
+
+COMPILATION TIME     =        0.000 SECONDS      3 Mb  WEX232-232 Aug 11, 2009
+GAMS Rev 232  WEX-WEI 23.2.1 x86_64/MS Windows          11/24/16 18:08:21 Page 2
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Equation Listing    SOLVE Stabil Using MIP From line 67
+
+
+---- fo  =E=  
+
+fo..  - 20*trasporto(s1,p1) - 40*trasporto(s1,p2) - 10*trasporto(s1,p3)
+     
+      - 30*trasporto(s1,p4) - 30*trasporto(s2,p1) - 60*trasporto(s2,p2)
+     
+      - 50*trasporto(s2,p3) - 40*trasporto(s2,p4) - 40*trasporto(s3,p1)
+     
+      - 50*trasporto(s3,p2) - 60*trasporto(s3,p3) - 70*trasporto(s3,p4)
+     
+      - 9000*attivazione(s1) - 7000*attivazione(s2) - 8000*attivazione(s3) + z
+      =E= 0 ; (LHS = 0)
+     
+
+---- dom  =G=  
+
+dom(p1)..  trasporto(s1,p1) + trasporto(s2,p1) + trasporto(s3,p1) =G= 150 ;
+     
+      (LHS = 0, INFES = 150 ****)
+     
+dom(p2)..  trasporto(s1,p2) + trasporto(s2,p2) + trasporto(s3,p2) =G= 400 ;
+     
+      (LHS = 0, INFES = 400 ****)
+     
+dom(p3)..  trasporto(s1,p3) + trasporto(s2,p3) + trasporto(s3,p3) =G= 200 ;
+     
+      (LHS = 0, INFES = 200 ****)
+     
+REMAINING ENTRY SKIPPED
+
+
+---- cap  =L=  
+
+cap(s1)..  trasporto(s1,p1) + trasporto(s1,p2) + trasporto(s1,p3)
+     
+      + trasporto(s1,p4) - 700*attivazione(s1) =L= 0 ; (LHS = 0)
+     
+cap(s2)..  trasporto(s2,p1) + trasporto(s2,p2) + trasporto(s2,p3)
+     
+      + trasporto(s2,p4) - 900*attivazione(s2) =L= 0 ; (LHS = 0)
+     
+cap(s3)..  trasporto(s3,p1) + trasporto(s3,p2) + trasporto(s3,p3)
+     
+      + trasporto(s3,p4) - 800*attivazione(s3) =L= 0 ; (LHS = 0)
+     
+GAMS Rev 232  WEX-WEI 23.2.1 x86_64/MS Windows          11/24/16 18:08:21 Page 3
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Column Listing      SOLVE Stabil Using MIP From line 67
+
+
+---- trasporto  
+
+trasporto(s1,p1)
+                (.LO, .L, .UP, .M = 0, 0, 900, 0)
+      -20       fo
+        1       dom(p1)
+        1       cap(s1)
+
+trasporto(s1,p2)
+                (.LO, .L, .UP, .M = 0, 0, 900, 0)
+      -40       fo
+        1       dom(p2)
+        1       cap(s1)
+
+trasporto(s1,p3)
+                (.LO, .L, .UP, .M = 0, 0, 900, 0)
+      -10       fo
+        1       dom(p3)
+        1       cap(s1)
+
+REMAINING 9 ENTRIES SKIPPED
+
+---- attivazione  
+
+attivazione(s1)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+    -9000       fo
+     -700       cap(s1)
+
+attivazione(s2)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+    -7000       fo
+     -900       cap(s2)
+
+attivazione(s3)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+    -8000       fo
+     -800       cap(s3)
+
+
+---- z  fo
+
+z
+                (.LO, .L, .UP, .M = -INF, 0, +INF, 0)
+        1       fo
+
+GAMS Rev 232  WEX-WEI 23.2.1 x86_64/MS Windows          11/24/16 18:08:21 Page 4
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Model Statistics    SOLVE Stabil Using MIP From line 67
+
+
+MODEL STATISTICS
+
+BLOCKS OF EQUATIONS           3     SINGLE EQUATIONS            8
+BLOCKS OF VARIABLES           3     SINGLE VARIABLES           16
+NON ZERO ELEMENTS            43     DISCRETE VARIABLES          3
+
+
+GENERATION TIME      =        0.016 SECONDS      4 Mb  WEX232-232 Aug 11, 2009
+
+
+EXECUTION TIME       =        0.016 SECONDS      4 Mb  WEX232-232 Aug 11, 2009
+GAMS Rev 232  WEX-WEI 23.2.1 x86_64/MS Windows          11/24/16 18:08:21 Page 5
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Solution Report     SOLVE Stabil Using MIP From line 67
+
+
+               S O L V E      S U M M A R Y
+
+     MODEL   Stabil              OBJECTIVE  z
+     TYPE    MIP                 DIRECTION  MINIMIZE
+     SOLVER  CPLEX               FROM LINE  67
+
+**** SOLVER STATUS     1 Normal Completion         
+**** MODEL STATUS      1 Optimal                   
+**** OBJECTIVE VALUE            49500.0000
+
+ RESOURCE USAGE, LIMIT          0.044      1000.000
+ ITERATION COUNT, LIMIT        15    2000000000
+
+ILOG CPLEX       Aug 14, 2009 23.2.1 WEX 12361.12582 WEI x86_64/MS Windows
+Cplex 12.1.0, GAMS Link 34 
+
+Cplex MIP uses 1 of 4 parallel threads. Change default with option THREADS.
+MIP status(101): integer optimal solution
+Fixed MIP status(1): optimal
+Proven optimal solution.
+
+MIP Solution:        49500.000000    (9 iterations, 0 nodes)
+Final Solve:         49500.000000    (6 iterations)
+
+Best possible:       49500.000000
+Absolute gap:            0.000000
+Relative gap:            0.000000
+
+
+                       LOWER     LEVEL     UPPER    MARGINAL
+
+---- EQU fo              .         .         .        1.000      
+
+---- EQU dom  
+
+      LOWER     LEVEL     UPPER    MARGINAL
+
+p1   150.000   150.000     +INF     30.000      
+p2   400.000   400.000     +INF     50.000      
+p3   200.000   200.000     +INF     20.000      
+p4   300.000   300.000     +INF     40.000      
+
+---- EQU cap  
+
+      LOWER     LEVEL     UPPER    MARGINAL
+
+s1     -INF       .         .      -10.000      
+s2     -INF   -550.000      .         .         
+s3     -INF       .         .         .         
+
+---- VAR trasporto  
+
+         LOWER     LEVEL     UPPER    MARGINAL
+
+s1.p1      .      100.000   900.000      .         
+s1.p2      .      400.000   900.000      .         
+s1.p3      .      200.000   900.000      .         
+s1.p4      .         .      900.000      EPS       
+s2.p1      .       50.000   900.000      .         
+s2.p2      .         .      900.000    10.000      
+s2.p3      .         .      900.000    30.000      
+s2.p4      .      300.000   900.000      .         
+s3.p1      .         .      900.000    10.000      
+s3.p2      .         .      900.000      EPS       
+s3.p3      .         .      900.000    40.000      
+s3.p4      .         .      900.000    30.000      
+
+---- VAR attivazione  
+
+      LOWER     LEVEL     UPPER    MARGINAL
+
+s1      .        1.000     1.000  2000.000      
+s2      .        1.000     1.000  7000.000      
+s3      .         .        1.000  8000.000      
+
+                       LOWER     LEVEL     UPPER    MARGINAL
+
+---- VAR z              -INF  49500.000     +INF       .         
+
+  z  fo
+
+
+**** REPORT SUMMARY :        0     NONOPT
+                             0 INFEASIBLE
+                             0  UNBOUNDED
+GAMS Rev 232  WEX-WEI 23.2.1 x86_64/MS Windows          11/24/16 18:08:21 Page 6
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+E x e c u t i o n
+
+
+----     68 VARIABLE attivazione.L  
+
+s1 1.000,    s2 1.000
+
+
+----     68 VARIABLE trasporto.L  
+
+            p1          p2          p3          p4
+
+s1     100.000     400.000     200.000
+s2      50.000                             300.000
+
+
+----     73 PARAMETER utilizzo  
+
+s1 700.000,    s2 350.000
+
+
+
+EXECUTION TIME       =        0.000 SECONDS      3 Mb  WEX232-232 Aug 11, 2009
+
+
+USER: Matematica, Statistica, Informatica e ApplicaziS091013:0751AN-WIN
+      Università degli Studi di Bergamo                          DC7952
+      License for teaching and research at degree granting institutions
+
+
+**** FILE SUMMARY
+
+Input      C:\Users\pisciella\Dropbox\CORSO Ricerca Operativa\GAMS tutorial\Tuto
+           rial 4\Es9\StabilimentiMdo.gms
+Output     C:\Users\pisciella\Dropbox\CORSO Ricerca Operativa\GAMS tutorial\Tuto
+           rial 4\Es9\StabilimentiMdo.lst

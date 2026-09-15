@@ -1,0 +1,262 @@
+GAMS Rev 232  WEX-WEI 23.2.1 x86_64/MS Windows          11/24/16 17:02:22 Page 1
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+C o m p i l a t i o n
+
+
+   1  option lp=cplex;
+   2   
+   3  set giorni /lunedi,martedi,mercoledi,giovedi,venerdi,sabato,domenica/;
+   4   
+   5   
+   6  set allavoro(giorni,giorni) personale presente nel giorno "giorno"
+   7  /
+   8  lunedi.giovedi
+   9  lunedi.venerdi
+  10  lunedi.sabato
+  11  lunedi.domenica
+  12  lunedi.lunedi
+  13  martedi.venerdi
+  14  martedi.sabato
+  15  martedi.domenica
+  16  martedi.lunedi
+  17  martedi.martedi
+  18  mercoledi.sabato
+  19  mercoledi.domenica
+  20  mercoledi.lunedi
+  21  mercoledi.martedi
+  22  mercoledi.mercoledi
+  23  giovedi.domenica
+  24  giovedi.lunedi
+  25  giovedi.martedi
+  26  giovedi.mercoledi
+  27  giovedi.giovedi
+  28  venerdi.lunedi
+  29  venerdi.martedi
+  30  venerdi.mercoledi
+  31  venerdi.giovedi
+  32  venerdi.venerdi
+  33  sabato.martedi
+  34  sabato.mercoledi
+  35  sabato.giovedi
+  36  sabato.venerdi
+  37  sabato.sabato
+  38  domenica.mercoledi
+  39  domenica.giovedi
+  40  domenica.venerdi
+  41  domenica.sabato
+  42  domenica.domenica
+  43  /;
+  44   
+  45  parameter num_min(giorni) /
+  46  lunedi=28
+  47  martedi=18
+  48  mercoledi=20
+  49  giovedi=26
+  50  venerdi=22
+  51  sabato=13
+  52  domenica=13
+  53  /;
+  54   
+  55  parameter paga(giorni)/
+  56  lunedi=250
+  57  martedi=270
+  58  mercoledi=310
+  59  giovedi=319
+  60  venerdi=310
+  61  sabato=310
+  62  domenica=285
+  63  /;
+  64   
+  65  alias(giorno,giorni);
+  66   
+  67  positive variable x(giorni) numero operatori;
+  68  variable z;
+  69   
+  70  equation fo, minreq(giorni);
+  71   
+  72  fo..
+  73           z=e=sum(giorni,paga(giorni)*x(giorni));
+  74   
+  75  minreq(giorno)..
+  76           sum(giorni$allavoro(giorno,giorni),x(giorni))=g=num_min(giorno);
+  77   
+  78  model OT /all/;
+  79   
+  80  solve OT using mip minimizing z;
+  81   
+  82  display x.l;
+
+
+COMPILATION TIME     =        0.000 SECONDS      3 Mb  WEX232-232 Aug 11, 2009
+GAMS Rev 232  WEX-WEI 23.2.1 x86_64/MS Windows          11/24/16 17:02:22 Page 2
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Equation Listing    SOLVE OT Using MIP From line 80
+
+
+---- fo  =E=  
+
+fo..  - 250*x(lunedi) - 270*x(martedi) - 310*x(mercoledi) - 319*x(giovedi)
+     
+      - 310*x(venerdi) - 310*x(sabato) - 285*x(domenica) + z =E= 0 ; (LHS = 0)
+     
+
+---- minreq  =G=  
+
+minreq(lunedi)..  x(lunedi) + x(giovedi) + x(venerdi) + x(sabato) + x(domenica)
+      =G= 28 ; (LHS = 0, INFES = 28 ****)
+     
+minreq(martedi)..  x(lunedi) + x(martedi) + x(venerdi) + x(sabato) + x(domenica)
+      =G= 18 ; (LHS = 0, INFES = 18 ****)
+     
+minreq(mercoledi)..  x(lunedi) + x(martedi) + x(mercoledi) + x(sabato)
+     
+      + x(domenica) =G= 20 ; (LHS = 0, INFES = 20 ****)
+     
+REMAINING 4 ENTRIES SKIPPED
+
+GAMS Rev 232  WEX-WEI 23.2.1 x86_64/MS Windows          11/24/16 17:02:22 Page 3
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Column Listing      SOLVE OT Using MIP From line 80
+
+
+---- x  numero operatori
+
+x(lunedi)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+     -250       fo
+        1       minreq(lunedi)
+        1       minreq(martedi)
+        1       minreq(mercoledi)
+        1       minreq(giovedi)
+        1       minreq(venerdi)
+
+x(martedi)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+     -270       fo
+        1       minreq(martedi)
+        1       minreq(mercoledi)
+        1       minreq(giovedi)
+        1       minreq(venerdi)
+        1       minreq(sabato)
+
+x(mercoledi)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+     -310       fo
+        1       minreq(mercoledi)
+        1       minreq(giovedi)
+        1       minreq(venerdi)
+        1       minreq(sabato)
+        1       minreq(domenica)
+
+REMAINING 4 ENTRIES SKIPPED
+
+---- z  
+
+z
+                (.LO, .L, .UP, .M = -INF, 0, +INF, 0)
+        1       fo
+
+GAMS Rev 232  WEX-WEI 23.2.1 x86_64/MS Windows          11/24/16 17:02:22 Page 4
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Model Statistics    SOLVE OT Using MIP From line 80
+
+
+MODEL STATISTICS
+
+BLOCKS OF EQUATIONS           2     SINGLE EQUATIONS            8
+BLOCKS OF VARIABLES           2     SINGLE VARIABLES            8
+NON ZERO ELEMENTS            43
+
+
+GENERATION TIME      =        0.359 SECONDS      4 Mb  WEX232-232 Aug 11, 2009
+
+
+EXECUTION TIME       =        0.359 SECONDS      4 Mb  WEX232-232 Aug 11, 2009
+GAMS Rev 232  WEX-WEI 23.2.1 x86_64/MS Windows          11/24/16 17:02:22 Page 5
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Solution Report     SOLVE OT Using MIP From line 80
+
+
+               S O L V E      S U M M A R Y
+
+     MODEL   OT                  OBJECTIVE  z
+     TYPE    MIP                 DIRECTION  MINIMIZE
+     SOLVER  CPLEX               FROM LINE  80
+
+**** SOLVER STATUS     1 Normal Completion         
+**** MODEL STATUS      1 Optimal                   
+**** OBJECTIVE VALUE             8106.0000
+
+ RESOURCE USAGE, LIMIT          0.009      1000.000
+ ITERATION COUNT, LIMIT         6    2000000000
+
+ILOG CPLEX       Aug 14, 2009 23.2.1 WEX 12361.12582 WEI x86_64/MS Windows
+Cplex 12.1.0, GAMS Link 34 
+
+LP status(1): optimal
+Optimal solution found.
+Objective :        8106.000000
+
+
+                       LOWER     LEVEL     UPPER    MARGINAL
+
+---- EQU fo              .         .         .        1.000      
+
+---- EQU minreq  
+
+             LOWER     LEVEL     UPPER    MARGINAL
+
+lunedi       28.000    28.000     +INF     89.667      
+martedi      18.000    20.000     +INF       .         
+mercoledi    20.000    20.000     +INF     75.667      
+giovedi      26.000    26.000     +INF     84.667      
+venerdi      22.000    25.000     +INF       .         
+sabato       13.000    13.000     +INF    109.667      
+domenica     13.000    13.000     +INF     35.000      
+
+---- VAR x  numero operatori
+
+             LOWER     LEVEL     UPPER    MARGINAL
+
+lunedi         .       15.000     +INF       .         
+martedi        .        1.000     +INF       .         
+mercoledi      .         .        +INF      5.000      
+giovedi        .        9.000     +INF       .         
+venerdi        .         .        +INF     75.667      
+sabato         .        3.000     +INF       .         
+domenica       .        1.000     +INF       .         
+
+                       LOWER     LEVEL     UPPER    MARGINAL
+
+---- VAR z              -INF   8106.000     +INF       .         
+
+
+**** REPORT SUMMARY :        0     NONOPT
+                             0 INFEASIBLE
+                             0  UNBOUNDED
+GAMS Rev 232  WEX-WEI 23.2.1 x86_64/MS Windows          11/24/16 17:02:22 Page 6
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+E x e c u t i o n
+
+
+----     82 VARIABLE x.L  numero operatori
+
+lunedi   15.000,    martedi   1.000,    giovedi   9.000,    sabato    3.000
+domenica  1.000
+
+
+
+EXECUTION TIME       =        0.094 SECONDS      3 Mb  WEX232-232 Aug 11, 2009
+
+
+USER: Matematica, Statistica, Informatica e ApplicaziS091013:0751AN-WIN
+      Università degli Studi di Bergamo                          DC7952
+      License for teaching and research at degree granting institutions
+
+
+**** FILE SUMMARY
+
+Input      C:\Users\pisciella\Dropbox\CORSO Ricerca Operativa\GAMS tutorial\Tuto
+           rial 4\Es4\OTmod.gms
+Output     C:\Users\pisciella\Dropbox\CORSO Ricerca Operativa\GAMS tutorial\Tuto
+           rial 4\Es4\OTmod.lst

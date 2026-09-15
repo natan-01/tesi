@@ -1,0 +1,828 @@
+Option LIMROW = 0, LIMCOL = 0;
+
+display "    (3) create the interegional trade data and transport margins";
+display "    between the regions and sectors based on gravity formulations";
+
+* National level: This code starts at the gdx-file UserGSF.gdx (but it could be changed to SAM_Panda.gdx)
+
+scalars
+  scal  !!scaling parameter monetary values
+  SAM_sum_u     !!sum over the total SAM
+;
+
+*scal = 1000000;
+scal = 1;
+
+* Checking the sum value of the user SAM
+SAM_sum_u = sum((good,sec),UGSN(good,sec))+sum((good,fin),UGFN(good,fin))+sum((sec,good),USGN(sec,good))+sum((sec,fin),USFN(sec,fin))+sum((fin,good),UFGN(fin,good))+sum((fin,sec),UFSN(fin,sec))
++sum((fin,ff),UFFN(fin,ff));
+display SAM_sum_u;
+* not in use in this code as it is now.
+
+* Rescaling the user SAM (not used at the moment)
+UGSN(good,sec)  =    UGSN(good,sec)/scal ;
+UGFN(good,fin)  =    UGFN(good,fin)/scal;
+USGN(sec,good)  =    USGN(sec,good)/scal;
+USFN(sec,fin)   =    USFN(sec,fin)/scal;
+UFGN(fin,good)  =    UFGN(fin,good)/scal;
+UFSN(fin,sec)   =    UFSN(fin,sec)/scal;
+UFFN(fin,ff)    =    UFFN(fin,ff)/scal;
+
+
+* ========================================================================== *
+scal = 1;
+* ================= The gravity-code starts here ======================   *
+*====== Indicators used to split national SAM between regions ==================
+Parameter
+*indicIO(sec,sec,reg)      indicator for regional production
+indicIO(reg,good,sec)      indicator for regional production
+* indicXD er ikke i bruk for tiden
+*indicXD(sec,sec,reg)      indicator for regional output
+indicCONS(reg,good)         indicator for regional households consumption
+indicCONSgov(reg,good)      indicator for regional households consumption
+indicEXP(reg,good)          indicator for regional exports by sector
+indicIMP(reg,sec)          indicator for regional imports by sector
+indicPROD(reg,sec)         indicator for regional production by sector
+indicLAB(reg,sec)          indicator for regional labor inputs by sector
+indicINV(reg,good)          indicator for regional labor inputs by sector
+*indic_trade(reg,reg2,sec)  trade indicator origin
+indic_trade(reg,reg)      trade indicator origin
+indic_trade1(reg,reg,sec) trade indicator destination
+indic_trade2(reg,reg,sec) trade indicator destination
+indic_trade3(reg,reg,sec) trade indicator destination
+capital(reg,sec)           capital or investments
+*indiccapital(reg,sec) er ikke i bruk
+*indiccapital(reg,sec)
+;
+
+* AW: checking whether different disaggregation keys affect the imbalance (and how)
+$ontext
+*distrPRegProdN(reg,sec)=.5;
+indicIO(ss,sec,reg)      = distrPRegProdN(reg,sec) ;
+indicXD(sec,ss,reg)      = distrPRegProdN(reg,sec) ;
+indicCONS(sec,reg)         = distrPRegProdN(reg,sec) ;
+indicCONSgov(sec,reg)      = distrPRegProdN(reg,sec) ;
+indicEXP(reg,sec)          = distrPRegProdN(reg,sec) ;
+indicIMP(reg,sec)          = distrPRegProdN(reg,sec) ;
+indicPROD(reg,sec)         = distrPRegProdN(reg,sec) ;
+indicLAB(reg,sec)          = distrPRegProdN(reg,sec) ;
+indicINV(reg,sec)          = distrPRegProdN(reg,sec) ;
+indiccapital(sec,reg)           = distrPRegProdN(reg,sec) ;
+$offtext
+*$ontext
+*indicIO(ss,sec,reg)      = distrPRegProdN(reg,sec) ;
+* AW 3/12: definer indicIO med good-dimensjon (enklere om har ikke-diagonale supplymatriser)
+* antar at fordelingen av produkter i totalproduksjonen av sec er lik i alle regioner (sec har samme produksjonsmønster over hele landet)
+indicIO(reg,good,sec)      = distrPRegProdN(reg,sec) ;
+*indicXD(sec,ss,reg)      = distrPRegProdN(reg,sec) ;
+indicCONS(reg,good)         = distrGoodRegincomeN(reg,good) ;
+indicCONSgov(reg,good)      = distrGoodRegincomeN(reg,good) ;
+indicEXP(reg,good)          = distrGoodRegProdN(reg,good) ;
+indicIMP(reg,sec)          = distrsecRegincomeN(reg,sec);
+indicPROD(reg,sec)         = distrPRegProdN(reg,sec) ;
+indicLAB(reg,sec)          = distrPRegProdN(reg,sec) ;
+indicINV(reg,good)          = distrGoodRegProdN(reg,good) ;
+
+*$offtext
+$ontext
+fixshare = 0.5
+indicIO(ss,sec,reg)      = fixshare;
+indicXD(sec,ss,reg)      = fixshare;
+indicCONS(sec,reg)         = fixshare;
+indicCONSgov(sec,reg)      = fixshare;
+indicEXP(reg,sec)          = fixshare;
+indicIMP(reg,sec)          = fixshare;
+indicPROD(reg,sec)         = fixshare;
+indicLAB(reg,sec)          = fixshare;
+indicINV(reg,sec)          = fixshare;
+indiccapital(sec,reg)      = fixshare;
+$offtext
+
+*  ULF: Testing a distance parameter to spread the trade between the regions ********************************************
+$ontext
+parameter
+*indic_trade(reg,reg2,sec)  = 1/card(reg)**2 ;
+*indic_trade1(reg,reg2,sec) = 1/card(reg)**2 ;
+
+trade_reg(reg,reg2,sec)
+trade_sec_new(reg,reg2,sec,sec)
+indic(reg,reg2,*)
+;
+
+*$libinclude xlimport  indic  Distance_region.xls   Sheet1!a1..c10 ;
+indic_trade(reg,reg2)      = indic(reg,reg2,"Distance") ;
+indic_trade1(reg,reg2,sec) = indic_trade(reg,reg2)/indic_trade(reg,reg2)**2;
+indic_trade2(reg,reg2,sec) = (indic_trade(reg,reg2)/indic_trade(reg,reg2)**2)/sum(regg,indic_trade1(reg,regg,sec) );
+indic_trade3(reg,reg2,sec) = (indic_trade(reg,reg2)/indic_trade(reg,reg2)**2)/sum(regg,indic_trade1(regg,reg2,sec) );
+
+
+*trade_sec_new(reg,reg2,sec,sec)    =  trade_sec() ;
+*trade_reg(reg,reg2,sec)  =  sum((county,county2,secc)$(mapCMtoReg(county,reg) and mapCMtoReg(county2,reg2)),trade_sec(county,county2,sec,sec) ) ;
+*               trade_sec(*,*,sec,sec)
+*trade_reg(reg,reg2) =sum((from_sec,to_sec, county, county2)$(mapCMtoReg(county,reg) and mapCMtoReg(county2,reg2)),trade_sec(county,county2,from_sec,to_sec) ) ;
+
+
+display trade_sec;
+$offtext
+*  ULF: Testing a distance parameter to spread the trade between the regions ********************************************
+
+*************************************************************************************************************************
+
+
+Parameters
+XDZ(sec,reg)              initial domestic gross production (output) level
+XDDZ(reg,sec,good)        detailed sectoral outputs
+IOZ(reg,good,sec)         initial intermediate demand for goods
+LZ(sec,reg)               labour inputs
+KZ(sec,reg)               capital inputs
+
+CZ(reg,good)              initial consumer demand for goods and leisure
+CBUDZ(reg)                budjett restriction to the household
+CGZ(reg,good)             initial government demand for goods
+IZ(reg,good)              initial investment demand private
+SVZ(reg,good)             initial changes in inventories
+
+EROWZ(reg,good)           initial exports to RoW
+MROWZ(reg,good)           initial imports from RoW
+TRADEZ(good,reg,reg)      initial domestic production delivered to domestic region reg
+TRADEZ_f(good,reg)        initial domestic production delivered from
+TRADEZ_t(good,reg)        initial domestic production delivered to
+*  not inclued yet EZ(cnt,com)       total exports
+
+TMCZ(good)                transport and trade margins
+TMCZ_R(reg,good)          regional version of trade and transportmargins
+TMCRZ(reg,reg,good)       transp and trade margins
+TAXCZR(reg,rr,good)       product taxes
+TMXZ(reg,good)            initial consumption of good for prod of transport and trade margins
+
+TTYZ(reg)                 income taxes
+TRANSFZ(reg)              govermental transfers to households
+
+SHZ(reg)                  initial household savings
+SGZ(reg)                  initial goverment savings
+SROWZ(reg)                savings from RoW
+INVZ(sec,reg)             sectoral investments
+
+TRROWZ(reg)               net transfers to government (closing trade balance)
+TRHROWZ(reg)              initial income of households tranfered to or received from RoW (closing trade balance)
+
+TAXCZ(good)                net taxes on products
+TAXCZ_R(reg,good)          net taxes on products for regions
+TAXPZ(sec,reg)             net taxes on production
+*TAXPZ_R(sec,reg)           net taxes on production for regions
+
+LSZ(reg)                  initial labour endowment
+KSZ(reg)                  initial capital endowment
+
+ITZ(reg)                  total investments
+CBUDZ(reg)                households consumption budget
+CBUDGZ(reg)               governmental consumption budget
+
+XZ(reg,good)               initial domestic sales
+XXDZ(reg,good)             domestic products supply to domestic market
+
+TMTZ(reg)                 initial total trade and transport margins
+
+*TAXCZ(sec)                other taxes on products
+*VATTZ(sec)                VAT taxes on products
+*EXCISZ(sec)               excise taxes on products
+YZ(reg)                   income of the households
+TAXRZ(reg)                tax revenues of the government
+TRYZ                      initial income tax revenues
+capital_check(reg,sec)    check if endowments are balanced - use capital as balancing element
+
+* AW 16/12: in order to find out where division by zero occurs & for which sec + good
+ccount(sec), gcount(good)
+rccount(reg,sec), rgcount(reg,good)
+grrcount(good,reg,reg)
+
+diffXD_n(good), diffX_n(good)
+investment_bal_n, trade_bal_global_n
+;
+
+display mapPFin;
+
+Display "Checking balances for national SAM:" ;
+** AW 26/1-15: checking whether balances are satisfied for the national SAM at all
+* Sales balances:
+* regional version: sum(sec,XDDZ(reg,sec,good))- EROWZ(reg,good) - sum(rr, TRADEZ(good,reg,rr)) ;
+diffXD_n(good) = sum(sec, USGN(sec,good))- sum(fin$mapPFin('149',fin),UGFN(good,fin))
+        - (sum(fin$mapPFin('146',fin),UGFN(good,fin))-sum(fin$mapPFin('146',fin),UFGN(fin,good)));
+display "Sales balances", diffXD_n;
+* Demand balances:
+* regional version: diffX(reg,good) = XZ(reg,good) - MROWZ(reg,good) - sum(rr, TRADEZ(good,rr,reg) + TMCRZ(rr,reg,good));
+diffX_n(good) =  sum(fin$mapPFin('142',fin),UGFN(good,fin))+ sum(fin$mapPFin('143',fin),UGFN(good,fin)) + sum(fin$mapPFin('144',fin),UGFN(good,fin))
+                  + sum(fin$mapPFin('145',fin),UGFN(good,fin)) + (sum(fin$mapPFin('146',fin),UGFN(good,fin))-sum(fin$mapPFin('146',fin),UFGN(fin,good)))
+                  + sum(sec,UGSN(good,sec)) - sum(fin$mapPFin('149',fin),UFGN(fin,good));
+display "Demand balances", diffX_n;
+* Investment balance:
+* regional version: investment_bal(reg) = sum(sec,INVZ(sec,reg)) + SHZ(reg)  + SGZ(reg) + SROWZ(reg)-ITZ(reg) - sum(good, SVZ(reg,good));
+investment_bal_n = sum((fin,sec)$mapPFin('144',fin),UFSN(fin,sec)) + sum((fin,ff)$(mapPFin('144',fin) and mapPFin('142',ff)),UFFN(fin,ff))
+                    + sum((fin,ff)$(mapPFin('144',fin) and mapPFin('143',ff)),UFFN(fin,ff))
+                    + (sum((fin,ff)$(mapPFin('144',fin) and mapPFin('149',ff)),UFFN(fin,ff)) - sum((fin,ff)$(mapPFin('149',fin) and mapPFin('144',ff)),UFFN(fin,ff)))
+                    -sum((good,fin)$mapPFin('144',fin),UGFN(good,fin)) - sum((good,fin)$mapPFin('145',fin),UGFN(good,fin));
+
+display "Investment balance", investment_bal_n;
+
+* Global trade balance:
+* regional version: trade_bal_global(reg) = sum(good,EROWZ(reg,good)) + sum((good,rr),TRADEZ(good,reg,rr)) + sum(good,TMXZ(reg,good)) -  TRHROWZ(reg) +  TRROWZ(reg) + SROWZ(reg)
+*  -  sum(good,MROWZ(reg,good)) - sum((good,rr),TRADEZ(good,rr,reg) + TMCRZ(rr,reg,good));
+*tradebal_glob(reg)=sum(good,mSAM(reg,good,'trade'))
+*      + (sum(fin$mapPFin('142',fin),mSAM(reg,fin,'trade')-mSAM(reg,'trade',fin)))
+*      + (sum(fin$mapPFin('143',fin),mSAM(reg,fin,'trade') - mSAM(reg,'trade',fin)))
+*      + (sum(fin$mapPFin('144',fin),mSAM(reg,fin,'trade') - mSAM(reg,'trade',fin)))
+*      - sum(good,mSAM(reg,'trade',good)) ;
+
+trade_bal_global_n = sum((fin,good)$mapPFin('149',fin),UGFN(good,fin))
+      + (sum((fin,ff)$(mapPFin('142',fin) and mapPFin('149',ff)),UFFN(fin,ff)-UFFN(ff,fin)))
+      + (sum((fin,ff)$(mapPFin('143',fin) and mapPFin('149',ff)),UFFN(fin,ff) - UFFN(ff,fin)))
+      + (sum((fin,ff)$(mapPFin('144',fin) and mapPFin('149',ff)),UFFN(fin,ff) - UFFN(ff,fin)))
+      - sum((fin,good)$mapPFin('149',fin),UFGN(fin,good)) ;
+
+display "Global trade balance", trade_bal_global_n;
+
+
+* ================= Initial domestic gross production ========================= *
+XDZ(sec,reg)         = sum(good,USGN(sec,good))*indicPROD(reg,sec);
+XDDZ(reg,sec,good) = USGN(sec,good)*indicProd(reg,sec);
+*XDZ_sum(sec)         = sum(reg,XDZ(sec,reg));
+*display XDZ,XDZ_sum;
+* =================                                   ========================= *
+
+display XDDZ, USGN, indicProd;
+
+* ================= Initial intermediate demand for goods ====================== *
+*IOZ(reg,good,sec) = UGSN(good,sec)*sum(ss$mapSecGood(ss,good),indicIO(ss,sec,reg));
+* AW 3/12
+IOZ(reg,good,sec) = UGSN(good,sec)*indicIO(reg,good,sec);
+*IOZ(ss,sec,reg) = sum(good$mapSecGood(ss,good),UGSN(good,sec))*indicIO(sec,ss,reg) ;
+* I'm not sure if this is the correct formulation, but the sum is correct based on the SAM (ULF)
+*display IOZ_new, IOZ;
+* AW 3/12
+*IOZ(reg,good,sec)$((sum((reg2,ss)$mapSecGood(ss,good),indicIO(ss,sec,reg2)) eq 0) and
+IOZ(reg,good,sec)$((sum(reg2,indicIO(reg2,good,sec)) eq 0) and
+                    UGSN(good,sec))
+                    = UGSN(good,sec) *XDZ(sec,reg)/sum(reg2,XDZ(sec,reg2)) ;
+* =================                                   ========================== *
+
+* =================           Row parameters                                    ====================== *
+*TAXPZ(sec,reg)            =     sum(fin$mapPFin('137',fin),UFSN(fin,sec))*( XDZ(sec,reg)/sum(reg2,XDZ(sec,reg2)) )  ;
+
+* AW 16/12
+display "div0 1";
+TAXPZ(sec,reg)$(abs(sum(fin$mapPFin('137',fin),UFSN(fin,sec)))<=checktol)=0;
+TAXPZ(sec,reg)$(abs(sum(fin$mapPFin('137',fin),UFSN(fin,sec)))>checktol) = sum(fin$mapPFin('137',fin),UFSN(fin,sec))*( XDZ(sec,reg)/sum(reg2,XDZ(sec,reg2)) )  ;
+ccount(sec)$(abs(sum(fin$mapPFin('137',fin),UFSN(fin,sec)))>checktol and abs(sum(reg2,XDZ(sec,reg2))<=checktol))=1 ;
+*);
+if (sum(sec,ccount(sec)) >0,
+   display ccount;
+);
+
+LZ(sec,reg)           =  sum(fin$mapPFin('131',fin),UFSN(fin,sec))*indicPROD(reg,sec) ;
+LSZ(reg)              =  sum(sec,LZ(sec,reg)) ;
+
+*used as an balancing parameter
+capital(reg,sec)$(abs(XDZ(sec,reg)>checktol)) = XDZ(sec,reg) - TAXPZ(sec,reg) - sum(good,IOZ(reg,good,sec))- LZ(sec,reg);
+
+* This is the NEG version from Olga
+*capital(sec,reg)$XDZ(sec,reg) = XDZ(sec,reg) + (SUBPZ(sec)- TAXPZ(sec))*XDZ(sec,reg)
+*                   /sum(regg,XDZ(sec,regg)) - sum(secc,IOZ(secc,sec,reg))
+*                   - sum(ed,LZ(sec,ed,reg)) - (EMPSCZ(sec) + EMPLSCZ(sec))
+*                   *sum(ed,LZ(sec,ed,reg))/sum((regg,ed),LZ(sec,ed,regg));
+
+*Display capital;
+*** AW 22/1-15
+*loop ((reg,sec),
+*   if ((capital(reg,sec) lt checktol),
+*          display capital;
+*          abort "check capital(reg,sec) "
+*   );
+*) ;
+
+
+*Split capital into two parts - investments and operating surplus
+*the old version of KZ(sec,reg)           =  sum(fin$mapPFin('135',fin),UFSN(fin,sec))*indicLAB(reg,sec) ;
+display "div0 2";
+
+* AW 16/12  - finn ut hvilke sec det gjelder
+rccount(reg,sec)=0;
+KZ(sec,reg)$(abs(capital(reg,sec))<=checktol)=0;
+KZ(sec,reg)$(abs(capital(reg,sec))>checktol) = capital(reg,sec)*(sum(fin$mapPFin('135',fin),UFSN(fin,sec)))/ (sum(fin$mapPFin('144',fin), UFSN(fin,sec)) + sum(fin$mapPFin('135',fin),UFSN(fin,sec))) ;
+rccount(reg,sec)$(abs(capital(reg,sec))>checktol and abs(sum(fin$mapPFin('144',fin), UFSN(fin,sec)) + sum(fin$mapPFin('135',fin),UFSN(fin,sec)))<=checktol) =2;
+
+if (sum((reg,sec),rccount(reg,sec)) <>0,
+   display rccount;
+);
+
+INVZ(sec,reg)   =  capital(reg,sec) -  KZ(sec,reg);
+*the old version INVZ(sec,reg) =  sum(fin$mapPFin('144',fin), UFSN(fin,sec))*KZ(sec,reg) /sum(rr,KZ(sec,rr));
+
+capital_check(reg,sec) = XDZ(sec,reg) - TAXPZ(sec,reg) - sum(good,IOZ(reg,good,sec))- LZ(sec,reg) - KZ(sec,reg) - INVZ(sec,reg);
+
+*Olgas version
+*KYZ(sec,reg)    =  capital(sec,reg)/(1 + TYKZ(sec)/sum(map1(act,sec),SAM("51",act)) + sum(map1(act,sec),SAM("61",act))/sum(map1(act,sec),SAM("51",act))) ;
+display capital_check;
+
+KSZ(reg)              =  sum(sec,KZ(sec,reg)) ;
+YZ(reg)               =  LSZ(reg) + KSZ(reg) ;
+
+display indicCons, indicIO, UGFN;
+
+
+* ================= Consumer demand       =================================== *
+CZ(reg,good)     = sum(fin$mapPFin('142',fin),UGFN(good,fin))*indicCONS(reg,good) ;
+CBUDZ(reg)   =  sum(good,CZ(reg,good)) ;
+
+* =================          Savings and transfers                       ====================== *
+TRYZ            =  sum((fin,ff)$(mapPFin('134',fin) and mapPFin('142',ff)),UFFN(fin,ff)) ;
+
+TTYZ(reg)       = TRYZ*YZ(reg)/sum(rr,YZ(rr));
+*TTYZ(reg)       =  sum((fin,ff)$(mapPFin('134',fin) and mapPFin('142',ff)),UFFN(fin,ff))* sum(good,CZ(reg,good))/sum((rr,gg),CZ(rr,gg));
+
+SHZ(reg)     =  sum((fin,ff)$(mapPFin('144',fin) and mapPFin('142',ff)),UFFN(fin,ff))*(YZ(reg)- TRYZ*YZ(reg)/sum(rr,YZ(rr)))
+                   /sum(reg2,(YZ(reg2)- TRYZ*YZ(reg2)/sum(rr,YZ(rr))) ) ;
+
+TRANSFZ(reg)         =     sum((fin,ff)$(mapPFin('142',fin) and mapPFin('143',ff)),UFFN(fin,ff))* ( CBUDZ(reg) - YZ(reg)
+                   +  TRYZ*YZ(reg)/sum((reg2),YZ(reg2)) + SHZ(reg))
+                   /sum((rr),( CBUDZ(rr) - YZ(rr)
+                   +  TRYZ*YZ(rr)/sum((reg2),YZ(reg2)) + SHZ(rr)) ) ;
+
+*TRFZ(th,reg)     =  SAM("59","60")*( CBUDZ(th,reg) - YZ(th,reg)
+*                   +  TRYZ*YZ(th,reg)/sum((thh,regg),YZ(thh,regg)) + SHZ(th,reg))
+*                   /sum((thhh,reggg),( CBUDZ(thhh,reggg) - YZ(thhh,reggg)
+*                   +  TRYZ*YZ(thhh,reggg)/sum((thh,regg),YZ(thh,regg)) + SHZ(thhh,reggg)) ) ;
+
+display TRANSFZ;
+
+TAXCZ(good)       =     sum(fin$mapPFin('138',fin),UFGN(fin,good)) ;
+
+*Column parameters
+* ================= Cheking if EROWZ is smaler than XDDZ and reducing EROWZ and MROWZ with this amount       ====================== *
+* We are adding a small number: 0.1, because we don't want to have the number 0
+parameter Adj_EROWZ_MROWZ(good),EROWZ_sjekk(reg,good);
+Adj_EROWZ_MROWZ(good)$(sum(sec,USGN(sec,good)) - sum(fin$mapPFin('149',fin),UGFN(good,fin)) <  0) = sum(sec,USGN(sec,good)) - sum(fin$mapPFin('149',fin),UGFN(good,fin) + checktol);
+*Adj_EROWZ_MROWZ(good)=0;
+* =================                                                                                           ====================== *
+* ================= Export to the rest of the world       ====================== *
+EROWZ(reg,good)  = (sum(fin$mapPFin('149',fin),UGFN(good,fin)) + Adj_EROWZ_MROWZ(good))*indicEXP(reg,good);
+EROWZ_sjekk(reg,good) =  (sum(fin$mapPFin('149',fin),UGFN(good,fin)))*indicEXP(reg,good);
+display EROWZ;
+
+
+* ================= Goverment demand       ====================== *
+CGZ(reg,good)    = sum(fin$mapPFin('143',fin),UGFN(good,fin))*indicCONSgov(reg,good);
+CBUDGZ(reg)          = sum(good,CGZ(reg,good)) ;
+
+* =================          Investment                       ====================== *
+IZ(reg,good)     = sum(fin$mapPFin('144',fin),UGFN(good,fin))*indicINV(reg,good);
+ITZ(reg)             = sum(good,IZ(reg,good)) ;
+*IZ(sec,reg)$((sum(regg,indicINV(regg,sec)) eq 0) and sum(map(cm,sec),SAM(cm,"61")))
+*                = sum(map(cm,sec),SAM(cm,"61"))
+*                *sum(secc,IZ(secc,reg))/sum(regg,sum(secc,IZ(secc,regg))) ;
+display "div0 6";
+
+
+* =================          Changes inventories                       ====================== *
+gcount(good)=0;
+SVZ(reg,good)$(abs(sum(fin$mapPFin('145',fin),UGFN(good,fin)))<= checktol)=0;
+SVZ(reg,good)$(abs(sum(fin$mapPFin('145',fin),UGFN(good,fin)))>checktol) = (sum(fin$mapPFin('145',fin),UGFN(good,fin)))*( CZ(reg,good) + CGZ(reg,good)+ sum(ss,IOZ(reg,good,ss)) )
+                  /sum(reg2,(CZ(reg2,good) + CGZ(reg2,good)+ sum(ss,IOZ(reg2,good,ss)) )) ;
+gcount(good)$(abs(sum(fin$mapPFin('145',fin),UGFN(good,fin)))>checktol and abs(sum(reg2,(CZ(reg2,good) + CGZ(reg2,good)+ sum(ss,IOZ(reg2,good,ss))))<=checktol)) = 6;
+
+if (sum(good,gcount(good)) <>0,
+   display "SVZ regionalisation not OK for product"
+   display gcount;
+);
+
+* =================                                        ====================== *
+
+* not sure if this is a good regionalization (Ulf) This parameter is not regionlized in the other code from OLGA *
+SGZ(reg)     = sum((fin,ff)$(mapPFin('144',fin) and mapPFin('143',ff)),UFFN(fin,ff))* sum(good,CGZ(reg,good))/sum((rr,good),CGZ(rr,good));
+*TAXRZ(reg)          =    TAXCZ(sec) +  TAXPZ(sec) + TTYZ(reg) );
+*=================                                                       ====================== *
+
+* =================         Production of Trade and transport margins                ====================== *
+TMCZ(good)$(sum(fin$mapPFin('146',fin),UFGN(fin,good)) gt checktol) =  sum(fin$mapPFin('146',fin),UFGN(fin,good)) ;
+
+display "Trade margins";
+display CZ, CGZ, IOZ;
+TMXZ(reg,good)$(sum(rr,CZ(rr,good)+ CGZ(rr,good) + sum(sec,IOZ(rr,good,sec)))) =sum(fin$mapPFin('146',fin),UGFN(good,fin))
+                  *(CZ(reg,good) + CGZ(reg,good)+ sum(sec,IOZ(reg,good,sec)))/sum(rr,CZ(rr,good)+ CGZ(rr,good) + sum(sec,IOZ(rr,good,sec)) ) ;
+TMTZ(reg)       = sum(good,TMXZ(reg,good));
+display TMTZ, TMXZ;
+* =================       Fiks for balancing trade and transport margins                                 ====================== *
+* Adjusting this code to make the trade and transport margins balanced
+* AW 18/12 - checking division by zero
+display "div0 8";
+gcount(good)=0;
+TMCZ_R(reg,good)$(abs(TMCZ(good))<=checktol)=0;
+TMCZ_R(reg,good)$(abs(TMCZ(good))>checktol  and (sum(reg2, CZ(reg2,good)+ CGZ(reg2,good)  ) + sum((reg2,ss), IOZ(reg2,good,ss)) ))
+         = TMCZ(good)*( CZ(reg,good)+ CGZ(reg,good) +  sum(sec, IOZ(reg,good,sec)) )/
+        ( sum(reg2, CZ(reg2,good)+ CGZ(reg2,good)  ) + sum((reg2,ss), IOZ(reg2,good,ss)) );
+gcount(good)$(abs(TMCZ(good))>checktol and abs(sum(reg2,(CZ(reg2,good) + CGZ(reg2,good)+ sum(ss,IOZ(reg2,good,ss)) )) <= checktol)) = 8;
+
+if (sum(good,gcount(good)) <>0,
+   display "regionalisation of trade and transport margins not OK for product(s)"
+   display gcount;
+);
+
+display TMCZ;
+
+
+* ====================                                           ======================== *
+* =================          Redefining parameters                     ====================== *
+*Redefinition of consumption,investments and intermediate consumption
+*(as net of taxes and subsidies)
+*Note that prices of commodities include transport and trade margins
+Parameter
+CZ_old(reg,good)
+IZ_old(reg,good)
+CGZ_old(reg,good)
+IOZ_old(reg,good,sec)
+TAX_total(good)
+DEM_total(good)
+;
+
+CZ_old(reg,good) = CZ(reg,good)  ;
+IZ_old(reg,good) = IZ(reg,good)  ;
+CGZ_old(reg,good)  = CGZ(reg,good) ;
+IOZ_old(reg,good,sec)  = IOZ(reg,good,sec) ;
+TAX_total(good)    = TAXCZ(good)+ TMCZ(good) ;
+*The old version with transportmargins excluded
+*TAX_total(good)    = TAXCZ(good) ;
+
+*creating the regional version of product taxes
+* AW 18/12
+display "div0 9";
+gcount(good)=0;
+TAXCZ_R(reg,good)$(abs(TAXCZ(good))<= checktol) = 0;
+TAXCZ_R(reg,good)$(abs(TAXCZ(good))>checktol and sum(reg2, CZ(reg2,good)+ CGZ(reg2,good) + IZ(reg2,good) ) + sum((reg2,ss), IOZ(reg2,good,ss)))
+         = TAXCZ(good)*( CZ(reg,good)+ CGZ(reg,good) + IZ(reg,good) + sum(sec, IOZ(reg,good,sec)) )/
+        ( sum(reg2, CZ(reg2,good)+ CGZ(reg2,good) + IZ(reg2,good) ) + sum((reg2,ss), IOZ(reg2,good,ss)) );
+gcount(good)$(abs(TAXCZ(good))>checktol and abs(sum(reg2, CZ(reg2,good)+ CGZ(reg2,good) + IZ(reg2,good) ) + sum((reg2,ss), IOZ(reg2,good,ss)) <=checktol)) =9;
+
+if (sum(good,gcount(good)) <>0,
+   display "regionalisation of product taxes not OK for product"
+   display gcount;
+);
+
+DEM_total(good)    = sum(reg, CZ(reg,good)+ CGZ(reg,good) + IZ(reg,good)) + sum((reg,sec), IOZ(reg,good,sec))  ;
+
+*CZ(reg,good)$CZ(reg,good)   = CZ(reg,good)  - TAX_total(good)*CZ_old(reg,good)/DEM_total(good) ;
+*IZ(reg,good)$IZ(reg,good)   = IZ(reg,good)  - TAX_total(good)*IZ_old(reg,good)/DEM_total(good) ;
+*CGZ(reg,good)$CGZ(reg,good) = CGZ(reg,good) - TAX_total(good)*CGZ_old(reg,good)/DEM_total(good) ;
+*IOZ(reg,good,sec)$IOZ(reg,good,sec) = IOZ(reg,good,sec) - TAX_total(good)*IOZ_old(reg,good,sec)/DEM_total(good) ;
+Display CZ, IZ, CGZ ;
+
+*loop ((sec,reg),
+*
+*  if ((CZ(sec,reg) lt 0)  ,
+*          abort "check CZ(sec,reg) "
+*     );
+*  ) ;
+*   if ((IZ(sec,reg) lt 0)  ,
+*          abort "check IZ(sec,reg) "
+*   );
+*   if ((CGZ(sec,reg) lt 0)  ,
+*          abort "CGZ(sec,reg) "
+*   );
+*);
+
+Parameter
+TMXZ_old(reg,good)
+;
+TMXZ_old(reg,good)=  TMXZ(reg,good) ;
+
+* Adjusting trade and transportmargins such that rows and columns is balanced
+*TMXZ(reg,good)=     TMXZ(reg,good) + TMXZ_old(reg,good)/sum(gg,TMXZ_old(reg,gg))  *    sum(gg, TMCZ_R(reg,gg) -  TMXZ_old(reg,gg)) ;
+** AW 31/10 Muligens ikke nødvendig? (får skeivfordeling tm/tf både med og uten)
+
+display TMCZ_R, TMXZ,TMXZ_old;
+* =================                          ====================== *
+
+
+* =================          Initial domestic sales                ====================== *
+XZ(reg,good)     = CZ(reg,good)+ CGZ(reg,good) + IZ(reg,good)+ SVZ(reg,good)
+                  + TMXZ(reg,good) + sum(sec,IOZ(reg,good,sec)) ;
+
+
+* =================          Initial import                ====================== *
+**MROWZ(sec,reg)  = sum((good,fin)$(mapSecGood(sec,good) and mapPFin('149',fin)),UFGN(fin,good))*XZ(sec,reg)/sum(rr,XZ(sec,rr))  ;
+display "div0 10";
+gcount(good)=0;
+MROWZ(reg,good)$(abs(sum(fin$mapPFin('149',fin),UFGN(fin,good))+ Adj_EROWZ_MROWZ(good))<=checktol)=0;
+MROWZ(reg,good)$(abs(sum(fin$mapPFin('149',fin),UFGN(fin,good)+ Adj_EROWZ_MROWZ(good)))>checktol) = sum(fin$mapPFin('149',fin),UFGN(fin,good)+ Adj_EROWZ_MROWZ(good))*XZ(reg,good)/sum(rr,XZ(rr,good));
+gcount(good)$(abs(sum(fin$mapPFin('149',fin),UFGN(fin,good)+ Adj_EROWZ_MROWZ(good)))>checktol and abs(sum(rr,XZ(rr,good))<=checktol))=10;
+
+if(sum(good,gcount(good))<>0,
+   display "Regionalisation of imports not OK for product"
+   display gcount;
+);
+
+display MROWZ;
+
+*This is the gravity formulation
+*---estimation of the interregional trade flows
+Parameters
+XDDE_o(good,reg,reg) initial split according to origin indic
+XDDE_d(good,reg,reg) initial split according to destination split
+SUM_o(reg,good)
+SUM_d(reg,good)
+cons_check(good,reg,reg) consistency check
+;
+
+*This formulation is based on distance *
+*XDDE_o(sec,reg,regg) = (XDZ(sec,reg)- EROWZ(sec,reg) )*indic_trade2(reg,regg,sec) ;
+*XDDE_d(sec,regg,reg) = (XZ(sec,reg) -  MROWZ(sec,reg))*indic_trade3(regg,reg,sec) ;
+
+* AW 16/12 + 18/12
+display "div0 11";
+rgcount(reg,good)=0;
+XDDE_o(good,reg,reg2)$((sum(sec,XDDZ(reg,sec,good))- EROWZ(reg,good))<=checktol)=0;
+XDDE_o(good,reg,reg2)$((sum(rr,(XZ(rr,good)-MROWZ(rr,good))))>checktol) = scal*(sum(sec,XDDZ(reg,sec,good))- EROWZ(reg,good))*(XZ(reg2,good) - MROWZ(reg2,good))
+                       /sum(rr,(XZ(rr,good)-MROWZ(rr,good)));
+rgcount(reg,good)$((sum(sec,XDDZ(reg,sec,good))-EROWZ(reg,good))>checktol and abs(sum(rr,(XZ(rr,good)-MROWZ(rr,good))))<=checktol)= 11;
+
+if (sum((reg,good),rgcount(reg,good)) <>0,
+   display "Problems with splitting XDDE_o for product and region"
+   display rgcount;
+);
+
+
+
+
+* AW 16/12 + 18/12
+display "div0 12";
+rgcount(reg,good)=0;
+XDDE_d(good,reg2,reg)$(abs(XZ(reg,good)-MROWZ(reg,good))<=checktol)=0;
+XDDE_d(good,reg2,reg)$((sum(rr,(sum(sec,XDDZ(rr,sec,good))- EROWZ(rr,good))))>checktol) = scal*(XZ(reg,good)- MROWZ(reg,good))*(sum(sec,XDDZ(reg2,sec,good))- EROWZ(reg2,good))
+                       /sum(rr,(sum(sec,XDDZ(rr,sec,good))- EROWZ(rr,good)) ) ;
+rgcount(reg,good)$(abs(XZ(reg,good)-MROWZ(reg,good))>checktol and (sum(rr,(sum(sec,XDDZ(rr,sec,good))- EROWZ(rr,good)) ) <=checktol)) =12;
+*rgcount(reg,good)$((sum(rr,(sum(sec,XDDZ(rr,sec,good))- EROWZ(rr,good)) ) = 0)) =12;
+*** AW 19/1: to check wrt. problems in gravity model - do "UNDF" entries in XDDE_d vause the problems?
+*XDDE_d(good,reg2,reg)$(abs(XZ(reg,good)-MROWZ(reg,good))>checktol and abs(sum(rr,(sum(sec,XDDZ(rr,sec,good))- EROWZ(rr,good)) ) <=checktol)) = (XZ(reg,good)-MROWZ(reg,good))/card(reg);
+
+if (sum((reg,good),rgcount(reg,good)) <>0,
+   display "Problems with splitting XDDE_d for product and region"
+   display rgcount;
+);
+
+*XDDE_d(good,reg2,reg) = scal*(XZ(reg,good)- MROWZ(reg,good))*(sum(sec$mapSecGood(sec,good),XDZ(sec,reg2))- EROWZ(reg2,good))
+*                       /sum(rr,(sum(sec$mapSecGood(sec,good),XDZ(sec,rr))- EROWZ(rr,good)) ) ;
+
+SUM_o(reg,good) = sum(rr, XDDE_o(good,rr,reg)) ;
+SUM_d(reg,good) = sum(rr, XDDE_d(good,reg,rr)) ;
+
+Parameter demandr(reg,good), supplyr(reg,good);
+demandr(reg,good) = (XZ(reg,good) -  MROWZ(reg,good))*scal ;
+supplyr(reg,good)$((sum(sec,XDDZ(reg,sec,good))- EROWZ(reg,good))<=checktol)=0;
+supplyr(reg,good)$((sum(sec,XDDZ(reg,sec,good))- EROWZ(reg,good))>checktol)=(sum(sec,XDDZ(reg,sec,good)) - EROWZ(reg,good))*scal ;
+Display demandr,supplyr ;
+
+Parameter ch_difference(good), transpm(good),taxcz(good);
+*ch_difference(good)  = sum(reg,SUM_o(reg,good)) - sum(reg,SUM_d(reg,good)) ;
+*The old version based on transportmargins included
+ch_difference(good)  = sum(reg,SUM_o(reg,good)) + TAXCZ(good) + TMCZ(good) - sum(reg,SUM_d(reg,good)) ;
+
+
+* =================          Useful datachecks before before gravity model        ====================== *
+parameter
+matrise1(good, *);
+matrise1(good, "O") =  sum(reg,SUM_o(reg,good));
+matrise1(good, "TAXCZ") =  TAXCZ(good);
+matrise1(good, "TMCZ") =  TMCZ(good);
+matrise1(good, "D") =  - sum(reg,SUM_d(reg,good));
+matrise1(good, "ch_difference") =  sum(reg,SUM_o(reg,good)) + TAXCZ(good) + TMCZ(good) - sum(reg,SUM_d(reg,good));
+matrise1(good, "MROWZ") =  sum(reg,MROWZ(reg,good));
+matrise1(good, "EROWZ") =  sum(reg,EROWZ(reg,good));
+matrise1(good, "XZ - MROWZ") =  sum(reg,XZ(reg,good))-sum(reg,MROWZ(reg,good));
+matrise1(good, "XDDZ - EROWZ") =  sum((sec,reg),XDDZ(reg,sec,good))-sum(reg,EROWZ(reg,good));
+* =================                                                               ====================== *
+
+
+Display ch_difference, matrise1 ;
+
+display "div0 13";
+gcount(good)=0;
+transpm(good)$(abs(TMCZ(good))<=checktol)=0;
+transpm(good)$(abs(TMCZ(good))>checktol) = TMCZ(good)*scal/sum(reg,SUM_o(reg,good)) ;
+gcount(good)$(abs(TMCZ(good))>checktol and abs(sum(reg,SUM_o(reg,good))) <= checktol) =13;
+
+if (sum(good,gcount(good)) <>0,
+   display gcount;
+);
+
+*display SUM_o(reg,good);
+
+
+
+
+display "div0 14";
+gcount(good)=0;
+taxcz(good)$(abs(TAXCZ(good))<=checktol)=0;
+taxcz(good)$(abs(TAXCZ(good))>checktol) = TAXCZ(good)*scal/sum(reg,SUM_o(reg,good)) ;
+gcount(good)$(abs(TAXCZ(good))>checktol and abs(sum(reg,SUM_o(reg,good))) <= checktol) =14;
+
+if (sum(good,gcount(good)) <>0,
+   display gcount;
+);
+
+* AW 18/12
+*loop(good,
+*   if( ch_difference(good) gt 1e-7,
+*     abort 'problem with ch_difference(good)'
+*     display 'ch_difference'
+*   ) ;
+*);
+gcount(good)=0;
+gcount(good)$(abs(ch_difference(good)) > checktol)=1;
+if (abs(sum(good, gcount(good))) > checktol,
+   display "problem with ch-difference for good"
+   display gcount
+);
+
+
+cons_check(good,reg,rr)$((abs(XDDE_o(good,reg,rr) + XDDE_d(good,reg,rr)) >checktol)
+ and ( abs(XDDE_o(good,reg,rr)*XDDE_d(good,reg,rr)) <=checktol)) = 1 ;
+
+Display cons_check ;
+
+* AW 18/12
+*loop ((good,reg,rr),
+*   if ((cons_check(good,reg,rr) eq 1),
+*        abort "check cons_check(good,reg,rr)"
+*   );
+*);
+
+Display XDDE_o ;
+
+* AW 18/12
+*loop ((good,reg,rr),
+*   if ((XDDE_o(good,reg,rr) lt 0),
+*        abort "check XDDE_o(good,reg,rr)"
+*   );
+*);
+grrcount(good,reg,rr)=0;
+grrcount(good,reg,rr)$(XDDE_o(good,reg,rr) lt checktol) = 1;
+if (sum((good,reg,rr),grrcount(good,reg,rr)),
+  display "check XDDE_o for good, reg, rr";
+  display grrcount;
+);
+
+Display XDDE_d ;
+
+* AW 18/12
+*loop ((good,reg,rr),
+*   if ((XDDE_d(good,reg,rr) lt 0),
+*        abort "check XDDE_d(good,reg,rr)"
+*   );
+*);
+grrcount(good,reg,rr)=0;
+grrcount(good,reg,rr)$(XDDE_d(good,reg,rr) lt checktol) = 1;
+if (sum((good,reg,rr),grrcount(good,reg,rr)),
+  display "check XDDE_d for good, reg, rr";
+  display grrcount;
+);
+
+display "===== Starting gravity model =====";
+
+Positive variables
+XDDE_oV(good,reg,reg)
+XDDE_dV(good,reg,reg)
+SUM_oV(reg,good)
+SUM_dV(reg,good)
+;
+Variables
+entropy
+;
+
+Equations
+EQ1(reg,good)
+EQ2(reg,good)
+EQ3(good,reg,reg)
+EQ4(reg,good)
+EQ5(reg,good)
+EQentropy
+EQentropy2
+;
+
+* AW 2/12: bruk XDDZ direkte istf. XDZ og mapSecGood
+EQ1(reg,good)$(sum(sec,XDDZ(reg,sec,good))- EROWZ(reg,good))..
+*EQ1(reg,good)$(sum(sec$mapSecGood(sec,good),XDZ(sec,reg))- EROWZ(reg,good))..
+*               scal*(sum(sec$mapSecGood(sec,good),XDZ(sec,reg))- EROWZ(reg,good)) =E=
+               scal*(sum(sec,XDDZ(reg,sec,good))- EROWZ(reg,good)) =E=
+               sum(rr, XDDE_oV(good,reg,rr)) ;
+
+EQ2(reg,good)$(XZ(reg,good)-MROWZ(reg,good) )..
+               scal*(XZ(reg,good)-MROWZ(reg,good) ) =E=
+               sum(rr, XDDE_dV(good,rr,reg) ) ;
+
+EQ3(good,reg,rr)$(XDDE_o(good,reg,rr)*XDDE_d(good,reg,rr))..
+               XDDE_dV(good,reg,rr)  =E= XDDE_oV(good,reg,rr)*(1+transpm(good)+taxcz(good)) ;
+* The old version with trade and transportmargins included
+*XDDE_dV(good,reg,rr)  =E= XDDE_oV(good,reg,rr)*(1+transpm(good)) ;
+
+
+EQ4(reg,good)$SUM_o(reg,good).. SUM_oV(reg,good) =E= sum(rr, XDDE_oV(good,rr,reg)) ;
+
+EQ5(reg,good)$SUM_d(reg,good).. SUM_dV(reg,good) =E= sum(rr, XDDE_dV(good,reg,rr)) ;
+
+*EQentropy.. entropy =E= sum((sec,reg)$SUM_o(sec,reg),SUM_oV(sec,reg)
+*            *log(SUM_oV(sec,reg)/SUM_o(sec,reg)))
+*            + sum((sec,reg)$SUM_d(sec,reg),SUM_dV(sec,reg)
+*            *log(SUM_dV(sec,reg)/SUM_d(sec,reg)));
+
+EQentropy.. entropy =E= sum((good,reg,rr)$(abs(XDDE_o(good,reg,rr)) > checktol),XDDE_oV(good,reg,rr)
+            *log(XDDE_oV(good,reg,rr)/XDDE_o(good,reg,rr)))
+            + sum((good,reg,rr)$(abs(XDDE_d(good,reg,rr))>checktol),XDDE_dV(good,reg,rr)
+           *log(XDDE_dV(good,reg,rr)/XDDE_d(good,reg,rr)));
+
+EQentropy2.. entropy =E= 1;
+
+Model entropy_min /EQ1,EQ2,EQ3,EQ4,EQ5,EQentropy2/ ;
+
+*** give some start values
+XDDE_oV.L(good,reg,rr)  =  XDDE_o(good,reg,rr) ;
+XDDE_dV.L(good,rr,reg)  =  XDDE_d(good,rr,reg) ;
+SUM_oV.L(reg,good)      =  SUM_o(reg,good)       ;
+SUM_dV.L(reg,good)      =  SUM_d(reg,good)       ;
+
+XDDE_oV.LO(good,reg,rr) =  0.000001*XDDE_o(good,reg,rr) ;
+XDDE_dV.LO(good,rr,reg) =  0.000001*XDDE_d(good,rr,reg) ;
+SUM_oV.LO(reg,good)       =  0.000001*SUM_o(reg,good)       ;
+SUM_dV.LO(reg,good)       =  0.000001*SUM_d(reg,good)       ;
+
+XDDE_oV.FX(good,reg,rr)$(abs(XDDE_o(good,reg,rr))< checktol) =  0 ;
+XDDE_dV.FX(good,rr,reg)$(abs(XDDE_d(good,rr,reg))<checktol) =  0 ;
+SUM_oV.FX(reg,good)$(abs(SUM_o(reg,good))<checktol)         =  0       ;
+SUM_dV.FX(reg,good)$(abs(SUM_d(reg,good)) < checktol)           =  0      ;
+
+option nlp=PATHNLP;
+Solve entropy_min using nlp minimizing entropy;
+
+Display XDDE_oV.L ;
+*** AW 23/1-15
+*loop ((good,reg,rr),
+*   if ((XDDE_oV.L(good,reg,rr) lt checktol),
+*        abort "check XDDE_o(good,reg,rr)"
+*   );
+*);
+
+
+Display XDDE_dV.L ;
+*** AW 23/1-15
+*loop ((good,reg,rr),
+*   if ((XDDE_dV.L(good,reg,rr) lt checktol),
+*        abort "check XDDE_d(good,reg,rr)"
+*   );
+*);
+
+Parameter diffXD(reg,good),diffX(reg,good),indicator_sec(good),diffXD2(reg,good) ;
+
+diffXD(reg,good)$(abs(sum(sec,XDDZ(reg,sec,good))- EROWZ(reg,good))>checktol)
+               = scal*(sum(sec,XDDZ(reg,sec,good))- EROWZ(reg,good) ) -
+               sum(rr, XDDE_oV.L(good,reg,rr)) ;
+
+diffX(reg,good)$(abs(XZ(reg,good) - MROWZ(reg,good))>checktol)
+               = scal*(XZ(reg,good)-MROWZ(reg,good) ) -
+               sum(rr, XDDE_dV.L(good,rr,reg) ) ;
+
+indicator_sec(good)= max(sum(reg,diffXD(reg,good)),sum(reg,diffX(reg,good))) ;
+
+Display XDDE_oV.L, diffXD, diffX,indicator_sec, entropy.L ;
+
+
+* Transport margins
+TAXCZR(reg,rr,good) =  XDDE_oV.L(good,reg,rr)*taxcz(good)/scal;
+TMCRZ(reg,rr,good) =  XDDE_oV.L(good,reg,rr)*transpm(good)/scal;
+
+display  TAXCZR, TMCRZ;
+
+* Interreginonal trade
+TRADEZ(good,reg,rr) = XDDE_oV.L(good,reg,rr)/scal ;
+TRADEZ_f(good,rr) = sum(reg,XDDE_oV.L(good,reg,rr)) ;
+TRADEZ_t(good,reg) = sum(rr,XDDE_oV.L(good,reg,rr)) ;
+
+* AW 2/12: bruk XDDZ direkte istf. XDZ og mapSecGood
+*diffXD(reg,good) = sum(sec$mapSecGood(sec,good),XDZ(sec,reg))- EROWZ(reg,good) - sum(rr, TRADEZ(good,reg,rr)) ;
+diffXD(reg,good) = sum(sec,XDDZ(reg,sec,good))- EROWZ(reg,good) - sum(rr, TRADEZ(good,reg,rr)) ;
+
+diffX(reg,good) = XZ(reg,good) - MROWZ(reg,good)  -
+*               sum(rr, TRADEZ(good,rr,reg) + TMCRZ(rr,reg,good)+ TAXCZR(rr,reg,good))  ;
+               sum(rr, TRADEZ(good,rr,reg) + TMCRZ(rr,reg,good))  ;
+
+Parameter TMCRZ_f(reg,good),  TAXCZR_f(reg,good);
+
+TMCRZ_f(reg,good) = sum(rr, TMCRZ(rr,reg,good))  ;
+TAXCZR_f(reg,good)  = sum(rr,TAXCZR(rr,reg,good))  ;
+
+*The old version with trade and transportmarginsincluded included
+*sum(rr, TRADEZ(good,rr,reg) + TMCRZ(rr,reg,good))  ;
+
+display XZ,diffXD,diffX,TMCRZ_f,TAXCZR_f,TRADEZ_f;
+
+** AW 30/9-14: this is just calculated, never written to mSAM or used further...
+XXDZ(reg,good)  =  sum(sec,XDDZ(reg,sec,good)) - sum(rr,TRADEZ(good,reg,rr)) - EROWZ(reg,good) ;
+
+*Execute_unload "sjekk"   TMCZ_R,  TMCRZ;
+display CZ_old, CZ;

@@ -1,0 +1,248 @@
+GAMS Rev 232  WEX-WEI 23.2.1 x86_64/MS Windows          11/24/16 17:39:29 Page 1
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+C o m p i l a t i o n
+
+
+   1  option limrow=1000
+   2   
+   3  option mip=cplex;
+   4   
+   5  set citta /Latina,Lecce,Matera,Napoli,Potenza,Salerno,Roma/;
+   6  alias(citta,citta1,citta2);
+      E' necessario fare l'alias altrimenti GAMS prende la stessa citta da entra
+      mbe le parti. non crea un sottoinsieme del prodotto cartesiano.
+  10  set vicini(citta1,citta2)
+  11  /
+  12  Latina.Latina
+  13  Latina.Napoli
+  14  Latina.Roma
+  15  Lecce.Lecce
+  16  Lecce.Matera
+  17  Matera.Matera
+  18  Matera.Lecce
+  19  Matera.Potenza
+  20  Napoli.Napoli
+  21  Napoli.Latina
+  22  Napoli.Potenza
+  23  Napoli.Salerno
+  24  Potenza.Potenza
+  25  Potenza.Matera
+  26  Potenza.Napoli
+  27  Potenza.Salerno
+  28  Salerno.Salerno
+  29  Salerno.Napoli
+  30  Salerno.Potenza
+  31  Roma.Roma
+  32  Roma.Latina
+  33  /;
+  34   
+  35  binary variable ospedale(citta);
+  36  variable z funzione obiettivo;
+  37   
+  38  equation fo, cover(citta);
+  39   
+  40  fo..
+  41           z=e=sum(citta,ospedale(citta));
+  42   
+  43  cover(citta1)..
+  44           sum(citta2$vicini(citta1,citta2),ospedale(citta2))=g=1;
+  45   
+  46  model Ospedali /all/;
+  47   
+  48  solve Ospedali using mip minimizing z;
+  49   
+  50  display ospedale.l;
+
+
+COMPILATION TIME     =        0.000 SECONDS      3 Mb  WEX232-232 Aug 11, 2009
+GAMS Rev 232  WEX-WEI 23.2.1 x86_64/MS Windows          11/24/16 17:39:29 Page 2
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Equation Listing    SOLVE Ospedali Using MIP From line 48
+
+
+---- fo  =E=  
+
+fo..  - ospedale(Latina) - ospedale(Lecce) - ospedale(Matera) - ospedale(Napoli)
+     
+      - ospedale(Potenza) - ospedale(Salerno) - ospedale(Roma) + z =E= 0 ;
+     
+      (LHS = 0)
+     
+
+---- cover  =G=  
+
+cover(Latina)..  ospedale(Latina) + ospedale(Napoli) + ospedale(Roma) =G= 1 ;
+     
+      (LHS = 0, INFES = 1 ****)
+     
+cover(Lecce)..  ospedale(Lecce) + ospedale(Matera) =G= 1 ;
+     
+      (LHS = 0, INFES = 1 ****)
+     
+cover(Matera)..  ospedale(Lecce) + ospedale(Matera) + ospedale(Potenza) =G= 1 ;
+     
+      (LHS = 0, INFES = 1 ****)
+     
+cover(Napoli)..  ospedale(Latina) + ospedale(Napoli) + ospedale(Potenza)
+     
+      + ospedale(Salerno) =G= 1 ; (LHS = 0, INFES = 1 ****)
+     
+cover(Potenza)..  ospedale(Matera) + ospedale(Napoli) + ospedale(Potenza)
+     
+      + ospedale(Salerno) =G= 1 ; (LHS = 0, INFES = 1 ****)
+     
+cover(Salerno)..  ospedale(Napoli) + ospedale(Potenza) + ospedale(Salerno) =G= 1
+      ; (LHS = 0, INFES = 1 ****)
+     
+cover(Roma)..  ospedale(Latina) + ospedale(Roma) =G= 1 ;
+     
+      (LHS = 0, INFES = 1 ****)
+     
+GAMS Rev 232  WEX-WEI 23.2.1 x86_64/MS Windows          11/24/16 17:39:29 Page 3
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Column Listing      SOLVE Ospedali Using MIP From line 48
+
+
+---- ospedale  
+
+ospedale(Latina)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+       -1       fo
+        1       cover(Latina)
+        1       cover(Napoli)
+        1       cover(Roma)
+
+ospedale(Lecce)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+       -1       fo
+        1       cover(Lecce)
+        1       cover(Matera)
+
+ospedale(Matera)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+       -1       fo
+        1       cover(Lecce)
+        1       cover(Matera)
+        1       cover(Potenza)
+
+REMAINING 4 ENTRIES SKIPPED
+
+---- z  funzione obiettivo
+
+z
+                (.LO, .L, .UP, .M = -INF, 0, +INF, 0)
+        1       fo
+
+GAMS Rev 232  WEX-WEI 23.2.1 x86_64/MS Windows          11/24/16 17:39:29 Page 4
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Model Statistics    SOLVE Ospedali Using MIP From line 48
+
+
+MODEL STATISTICS
+
+BLOCKS OF EQUATIONS           2     SINGLE EQUATIONS            8
+BLOCKS OF VARIABLES           2     SINGLE VARIABLES            8
+NON ZERO ELEMENTS            29     DISCRETE VARIABLES          7
+
+
+GENERATION TIME      =        1.906 SECONDS      4 Mb  WEX232-232 Aug 11, 2009
+
+
+EXECUTION TIME       =        1.906 SECONDS      4 Mb  WEX232-232 Aug 11, 2009
+GAMS Rev 232  WEX-WEI 23.2.1 x86_64/MS Windows          11/24/16 17:39:29 Page 5
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Solution Report     SOLVE Ospedali Using MIP From line 48
+
+
+               S O L V E      S U M M A R Y
+
+     MODEL   Ospedali            OBJECTIVE  z
+     TYPE    MIP                 DIRECTION  MINIMIZE
+     SOLVER  CPLEX               FROM LINE  48
+
+**** SOLVER STATUS     1 Normal Completion         
+**** MODEL STATUS      1 Optimal                   
+**** OBJECTIVE VALUE                3.0000
+
+ RESOURCE USAGE, LIMIT          0.011      1000.000
+ ITERATION COUNT, LIMIT         0    2000000000
+
+ILOG CPLEX       Aug 14, 2009 23.2.1 WEX 12361.12582 WEI x86_64/MS Windows
+Cplex 12.1.0, GAMS Link 34 
+
+Cplex MIP uses 1 of 4 parallel threads. Change default with option THREADS.
+MIP status(101): integer optimal solution
+Fixed MIP status(1): optimal
+Proven optimal solution.
+
+MIP Solution:            3.000000    (0 iterations, 0 nodes)
+Final Solve:             3.000000    (0 iterations)
+
+Best possible:           3.000000
+Absolute gap:            0.000000
+Relative gap:            0.000000
+
+
+                       LOWER     LEVEL     UPPER    MARGINAL
+
+---- EQU fo              .         .         .        1.000      
+
+---- EQU cover  
+
+           LOWER     LEVEL     UPPER    MARGINAL
+
+Latina      1.000     2.000     +INF       .         
+Lecce       1.000     1.000     +INF       .         
+Matera      1.000     1.000     +INF       .         
+Napoli      1.000     2.000     +INF       .         
+Potenza     1.000     1.000     +INF       .         
+Salerno     1.000     1.000     +INF       .         
+Roma        1.000     1.000     +INF       .         
+
+---- VAR ospedale  
+
+           LOWER     LEVEL     UPPER    MARGINAL
+
+Latina       .        1.000     1.000     1.000      
+Lecce        .        1.000     1.000     1.000      
+Matera       .         .        1.000     1.000      
+Napoli       .        1.000     1.000     1.000      
+Potenza      .         .        1.000     1.000      
+Salerno      .         .        1.000     1.000      
+Roma         .         .        1.000     1.000      
+
+                       LOWER     LEVEL     UPPER    MARGINAL
+
+---- VAR z              -INF      3.000     +INF       .         
+
+  z  funzione obiettivo
+
+
+**** REPORT SUMMARY :        0     NONOPT
+                             0 INFEASIBLE
+                             0  UNBOUNDED
+GAMS Rev 232  WEX-WEI 23.2.1 x86_64/MS Windows          11/24/16 17:39:29 Page 6
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+E x e c u t i o n
+
+
+----     50 VARIABLE ospedale.L  
+
+Latina 1.000,    Lecce  1.000,    Napoli 1.000
+
+
+
+EXECUTION TIME       =        0.047 SECONDS      3 Mb  WEX232-232 Aug 11, 2009
+
+
+USER: Matematica, Statistica, Informatica e ApplicaziS091013:0751AN-WIN
+      Università degli Studi di Bergamo                          DC7952
+      License for teaching and research at degree granting institutions
+
+
+**** FILE SUMMARY
+
+Input      C:\Users\pisciella\Dropbox\CORSO Ricerca Operativa\GAMS tutorial\Tuto
+           rial 4\Es8\OspedaliMod.gms
+Output     C:\Users\pisciella\Dropbox\CORSO Ricerca Operativa\GAMS tutorial\Tuto
+           rial 4\Es8\OspedaliMod.lst

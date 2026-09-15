@@ -1,0 +1,320 @@
+GAMS Rev 232  WEX-WEI 23.2.1 x86_64/MS Windows          11/16/16 13:56:48 Page 1
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+C o m p i l a t i o n
+
+
+   1  *option solver lp= cplex;
+   3  option limrow=700;
+   4   
+INCLUDE    C:\Users\pisciella\Dropbox\CORSO Ricerca Operativa\GAMS tutorial\Tuto
+           rial 3\shippingdata.gms
+   6  set impianti commenti vari /Seattle, San-Diego/;
+   7  set mercati insieme dei mercati /New-York, Chicago, Topeka/;
+   8   
+   9  parameter a(impianti) capacita massima impianti /
+  10  Seattle=350
+  11  San-Diego=600
+  12  /;
+  13   
+  14  parameter b(mercati) domanda minima /
+  15  New-York = 325
+  16  Chicago = 300
+  17  Topeka=275
+  18  /;
+  19   
+  20  parameter costi(impianti,mercati) /
+  21  Seattle.New-York = 2.5
+  22  Seattle.Chicago = 1.7
+  23  Seattle.Topeka = 1.8
+  24  San-Diego.New-York = 2.5
+  25  San-Diego.Chicago = 1.8
+  26  San-Diego.Topeka = 1.4
+  27  /;
+  28   
+  29  set collegamenti(impianti,mercati) Topeka è raggiungibile solo da Seattle
+  30  /
+  31  Seattle.New-York
+  32  Seattle.Chicago
+  33  Seattle.Topeka
+  34  San-Diego.New-York
+  35  San-Diego.Chicago
+  36  /;
+  37   
+  38  equations obiettivo, capmax, dommin;
+  39   
+  40  variable z;
+  41  positive variable x(impianti,mercati);
+  42   
+  43  alias(impianti,i);
+  44  alias(mercati,j);
+  45   
+  46  obiettivo..
+  47           z=e=sum((i,j),costi(i,j)*x(i,j));
+  48   
+  49  capmax(i)..
+  50           sum(j$collegamenti(i,j),x(i,j))=l=a(i);
+  51   
+  52  dommin(j)..
+  53           sum(i$collegamenti(i,j),x(i,j))=g=b(j);
+  54   
+  55  model nomemodello /obiettivo,capmax,dommin/;
+  56   
+  57  solve nomemodello using lp minimizing z;
+  58   
+  59  display x.l;
+GAMS Rev 232  WEX-WEI 23.2.1 x86_64/MS Windows          11/16/16 13:56:48 Page 2
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Symbol Listing
+
+
+SYMBOL      TYPE   REFERENCES
+
+a            PARAM declared        9  defined        9      ref       50
+b            PARAM declared       14  defined       14      ref       53
+capmax       EQU   declared       38  defined       50 impl-asn       57
+                        ref       55
+collegamenti  SET  
+                   declared       29  defined       30      ref       50
+                         53
+costi        PARAM declared       20  defined       20      ref       47
+dommin       EQU   declared       38  defined       53 impl-asn       57
+                        ref       55
+i            SET   declared       43      ref     2*47     3*50     2*53
+                    control       47       49       53
+impianti     SET   declared        6  defined        6      ref        9
+                         20       29       41       43
+j            SET   declared       44      ref     2*47     2*50     3*53
+                    control       47       50       52
+mercati      SET   declared        7  defined        7      ref       14
+                         20       29       41       44
+nomemodello  MODEL
+                   declared       55  defined       55 impl-asn       57
+                        ref       57
+obiettivo    EQU   declared       38  defined       47 impl-asn       57
+                        ref       55
+x            VAR   declared       41 impl-asn       57      ref       47
+                         50       53       59
+z            VAR   declared       40 impl-asn       57      ref       47
+                         57
+
+SETS      
+
+collegamenti  Topeka è raggiungibile solo da Seattle
+i             Aliased with impianti
+impianti      commenti vari
+j             Aliased with mercati
+mercati       insieme dei mercati
+
+PARAMETERS
+
+a             capacita massima impianti
+b             domanda minima
+costi         
+
+VARIABLES 
+
+x             
+z             
+
+EQUATIONS 
+
+capmax        
+dommin        
+obiettivo     
+
+MODELS    
+
+nomemodello   
+GAMS Rev 232  WEX-WEI 23.2.1 x86_64/MS Windows          11/16/16 13:56:48 Page 3
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Include File Summary
+
+
+   SEQ   GLOBAL TYPE      PARENT   LOCAL  FILENAME
+
+     1        1 INPUT          0       0  C:\Users\pisciella\Dropbox\CORSO Ricer
+                                          ca Operativa\GAMS tutorial\Tutorial 3\
+                                          shipping2.gms
+     2        5 INCLUDE        1       5  .C:\Users\pisciella\Dropbox\CORSO Rice
+                                           rca Operativa\GAMS tutorial\Tutorial 
+                                           3\shippingdata.gms
+
+
+COMPILATION TIME     =        0.000 SECONDS      3 Mb  WEX232-232 Aug 11, 2009
+GAMS Rev 232  WEX-WEI 23.2.1 x86_64/MS Windows          11/16/16 13:56:48 Page 4
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Equation Listing    SOLVE nomemodello Using LP From line 57
+
+
+---- obiettivo  =E=  
+
+obiettivo..  z - 2.5*x(Seattle,New-York) - 1.7*x(Seattle,Chicago)
+     
+      - 1.8*x(Seattle,Topeka) - 2.5*x(San-Diego,New-York)
+     
+      - 1.8*x(San-Diego,Chicago) - 1.4*x(San-Diego,Topeka) =E= 0 ; (LHS = 0)
+     
+
+---- capmax  =L=  
+
+capmax(Seattle)..  x(Seattle,New-York) + x(Seattle,Chicago) + x(Seattle,Topeka)
+      =L= 350 ; (LHS = 0)
+     
+capmax(San-Diego)..  x(San-Diego,New-York) + x(San-Diego,Chicago) =L= 600 ;
+     
+      (LHS = 0)
+     
+
+---- dommin  =G=  
+
+dommin(New-York)..  x(Seattle,New-York) + x(San-Diego,New-York) =G= 325 ;
+     
+      (LHS = 0, INFES = 325 ****)
+     
+dommin(Chicago)..  x(Seattle,Chicago) + x(San-Diego,Chicago) =G= 300 ;
+     
+      (LHS = 0, INFES = 300 ****)
+     
+dommin(Topeka)..  x(Seattle,Topeka) =G= 275 ; (LHS = 0, INFES = 275 ****)
+     
+GAMS Rev 232  WEX-WEI 23.2.1 x86_64/MS Windows          11/16/16 13:56:48 Page 5
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Column Listing      SOLVE nomemodello Using LP From line 57
+
+
+---- z  
+
+z
+                (.LO, .L, .UP, .M = -INF, 0, +INF, 0)
+        1       obiettivo
+
+
+---- x  
+
+x(Seattle,New-York)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+       -2.5     obiettivo
+        1       capmax(Seattle)
+        1       dommin(New-York)
+
+x(Seattle,Chicago)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+       -1.7     obiettivo
+        1       capmax(Seattle)
+        1       dommin(Chicago)
+
+x(Seattle,Topeka)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+       -1.8     obiettivo
+        1       capmax(Seattle)
+        1       dommin(Topeka)
+
+REMAINING 3 ENTRIES SKIPPED
+GAMS Rev 232  WEX-WEI 23.2.1 x86_64/MS Windows          11/16/16 13:56:48 Page 6
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Model Statistics    SOLVE nomemodello Using LP From line 57
+
+
+MODEL STATISTICS
+
+BLOCKS OF EQUATIONS           3     SINGLE EQUATIONS            6
+BLOCKS OF VARIABLES           2     SINGLE VARIABLES            7
+NON ZERO ELEMENTS            17
+
+
+GENERATION TIME      =        0.031 SECONDS      4 Mb  WEX232-232 Aug 11, 2009
+
+
+EXECUTION TIME       =        0.031 SECONDS      4 Mb  WEX232-232 Aug 11, 2009
+GAMS Rev 232  WEX-WEI 23.2.1 x86_64/MS Windows          11/16/16 13:56:48 Page 7
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Solution Report     SOLVE nomemodello Using LP From line 57
+
+
+               S O L V E      S U M M A R Y
+
+     MODEL   nomemodello         OBJECTIVE  z
+     TYPE    LP                  DIRECTION  MINIMIZE
+     SOLVER  CPLEX               FROM LINE  57
+
+**** SOLVER STATUS     1 Normal Completion         
+**** MODEL STATUS      1 Optimal                   
+**** OBJECTIVE VALUE             1840.0000
+
+ RESOURCE USAGE, LIMIT          0.009      1000.000
+ ITERATION COUNT, LIMIT         4    2000000000
+
+ILOG CPLEX       Aug 14, 2009 23.2.1 WEX 12361.12582 WEI x86_64/MS Windows
+Cplex 12.1.0, GAMS Link 34 
+
+LP status(1): optimal
+Optimal solution found.
+Objective :        1840.000000
+
+
+                       LOWER     LEVEL     UPPER    MARGINAL
+
+---- EQU obiettivo       .         .         .        1.000      
+
+---- EQU capmax  
+
+             LOWER     LEVEL     UPPER    MARGINAL
+
+Seattle       -INF    350.000   350.000    -0.100      
+San-Diego     -INF    550.000   600.000      .         
+
+---- EQU dommin  
+
+            LOWER     LEVEL     UPPER    MARGINAL
+
+New-York   325.000   325.000     +INF      2.500      
+Chicago    300.000   300.000     +INF      1.800      
+Topeka     275.000   275.000     +INF      1.900      
+
+                       LOWER     LEVEL     UPPER    MARGINAL
+
+---- VAR z              -INF   1840.000     +INF       .         
+
+---- VAR x  
+
+                      LOWER     LEVEL     UPPER    MARGINAL
+
+Seattle  .New-York      .         .        +INF      0.100      
+Seattle  .Chicago       .       75.000     +INF       .         
+Seattle  .Topeka        .      275.000     +INF       .         
+San-Diego.New-York      .      325.000     +INF       .         
+San-Diego.Chicago       .      225.000     +INF       .         
+San-Diego.Topeka        .         .        +INF      1.400      
+
+
+**** REPORT SUMMARY :        0     NONOPT
+                             0 INFEASIBLE
+                             0  UNBOUNDED
+GAMS Rev 232  WEX-WEI 23.2.1 x86_64/MS Windows          11/16/16 13:56:48 Page 8
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+E x e c u t i o n
+
+
+----     59 VARIABLE x.L  
+
+             New-York     Chicago      Topeka
+
+Seattle                    75.000     275.000
+San-Diego     325.000     225.000
+
+
+
+EXECUTION TIME       =        0.000 SECONDS      3 Mb  WEX232-232 Aug 11, 2009
+
+
+USER: Matematica, Statistica, Informatica e ApplicaziS091013:0751AN-WIN
+      Università degli Studi di Bergamo                          DC7952
+      License for teaching and research at degree granting institutions
+
+
+**** FILE SUMMARY
+
+Input      C:\Users\pisciella\Dropbox\CORSO Ricerca Operativa\GAMS tutorial\Tuto
+           rial 3\shipping2.gms
+Output     C:\Users\pisciella\Dropbox\CORSO Ricerca Operativa\GAMS tutorial\Tuto
+           rial 3\shipping2.lst

@@ -1,0 +1,47 @@
+
+--- Job OTmod.gms Start 11/24/16 17:02:22 WEX-WEI 23.2.1 x86_64/MS Windows     
+GAMS Rev 232  Copyright (C) 1987-2009 GAMS Development. All rights reserved
+Licensee: Matematica, Statistica, Informatica e ApplicaziS091013:0751AN-WIN
+          Università degli Studi di Bergamo                          DC7952
+          License for teaching and research at degree granting institutions
+--- Starting compilation
+--- OTmod.gms(82) 3 Mb
+--- Starting execution: elapsed 0:00:00.007
+--- OTmod.gms(1) 4 Mb
+--- Generating MIP model OT
+--- OTmod.gms(80) 4 Mb
+---   8 rows  8 columns  43 non-zeroes
+--- OTmod.gms(80) 4 Mb
+--- Executing CPLEX: elapsed 0:00:00.374
+--- OTmod.gms(80) 4 Mb
+
+ILOG CPLEX       Aug 14, 2009 23.2.1 WEX 12361.12582 WEI x86_64/MS Windows
+Cplex 12.1.0, GAMS Link 34 
+
+Reading data...
+Starting Cplex...
+Tried aggregator 1 time.
+LP Presolve eliminated 1 rows and 1 columns.
+Reduced LP has 7 rows, 7 columns, and 35 nonzeros.
+Presolve time =    0.00 sec.
+
+Iteration      Dual Objective            In Variable           Out Variable
+     1            7000.000000              x(lunedi)   minreq(lunedi) slack
+     2            7780.000000             x(venerdi)   minreq(sabato) slack
+     3            7879.000000             x(giovedi)  minreq(giovedi) slack
+     4            7879.000000              x(sabato)minreq(mercoledi) slack
+     5            8071.000000             x(martedi)             x(venerdi)
+     6            8106.000000            x(domenica) minreq(domenica) slack
+LP status(1): optimal
+
+Optimal solution found.
+Objective :        8106.000000
+
+--- Restarting execution
+--- OTmod.gms(80) 2 Mb
+--- Reading solution for model OT
+--- OTmod.gms(80) 2 Mb
+--- Executing after solve: elapsed 0:00:00.466
+--- OTmod.gms(82) 3 Mb
+*** Status: Normal completion
+--- Job OTmod.gms Stop 11/24/16 17:02:23 elapsed 0:00:00.576

@@ -1,0 +1,47 @@
+
+--- Job shipping2.gms Start 11/16/16 13:56:48 WEX-WEI 23.2.1 x86_64/MS Windows     
+GAMS Rev 232  Copyright (C) 1987-2009 GAMS Development. All rights reserved
+Licensee: Matematica, Statistica, Informatica e ApplicaziS091013:0751AN-WIN
+          Università degli Studi di Bergamo                          DC7952
+          License for teaching and research at degree granting institutions
+--- Starting compilation
+--- shipping2.gms(5) 2 Mb
+--- .shippingdata.gms(31) 3 Mb
+--- shipping2.gms(28) 3 Mb
+--- Starting execution: elapsed 0:00:00.013
+--- shipping2.gms(3) 4 Mb
+--- Generating LP model nomemodello
+--- shipping2.gms(57) 4 Mb
+---   6 rows  7 columns  17 non-zeroes
+--- shipping2.gms(57) 4 Mb
+--- Executing CPLEX: elapsed 0:00:00.049
+--- shipping2.gms(57) 4 Mb
+
+ILOG CPLEX       Aug 14, 2009 23.2.1 WEX 12361.12582 WEI x86_64/MS Windows
+Cplex 12.1.0, GAMS Link 34 
+
+Reading data...
+Starting Cplex...
+Tried aggregator 1 time.
+LP Presolve eliminated 2 rows and 3 columns.
+Reduced LP has 4 rows, 4 columns, and 8 nonzeros.
+Presolve time =    0.00 sec.
+
+Iteration      Dual Objective            In Variable           Out Variable
+     1            1307.500000    x(Seattle.New-York) dommin(New-York) slack
+     2            1817.500000     x(Seattle.Chicago)  dommin(Chicago) slack
+     3            1817.500000  x(San-Diego.New-York)  capmax(Seattle) slack
+     4            1840.000000   x(San-Diego.Chicago)    x(Seattle.New-York)
+LP status(1): optimal
+
+Optimal solution found.
+Objective :        1840.000000
+
+--- Restarting execution
+--- shipping2.gms(57) 2 Mb
+--- Reading solution for model nomemodello
+--- shipping2.gms(57) 2 Mb
+--- Executing after solve: elapsed 0:00:00.128
+--- shipping2.gms(59) 3 Mb
+*** Status: Normal completion
+--- Job shipping2.gms Stop 11/16/16 13:56:48 elapsed 0:00:00.132

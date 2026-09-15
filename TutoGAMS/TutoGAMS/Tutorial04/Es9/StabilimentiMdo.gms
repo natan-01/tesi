@@ -1,0 +1,73 @@
+option mip=cplex;
+
+set stabilimenti /s1,s2,s3/;
+set retail /p1,p2,p3,p4/;
+
+parameter costo_attivazione(stabilimenti)
+/
+s1=9000
+s2=7000
+s3=8000
+/;
+
+parameter domanda(retail)
+/
+p1=150
+p2=400
+p3=200
+p4=300
+/;
+
+parameter costo_trasporto(stabilimenti,retail)
+/
+s1.p1=20
+s1.p2=40
+s1.p3=10
+s1.p4=30
+s2.p1=30
+s2.p2=60
+s2.p3=50
+s2.p4=40
+s3.p1=40
+s3.p2=50
+s3.p3=60
+s3.p4=70
+/;
+
+
+parameter capacita(stabilimenti)
+/
+s1=700
+s2=900
+s3=800
+/;
+
+
+equation fo,dom(retail),cap(stabilimenti);
+
+positive variable trasporto(stabilimenti,retail);
+binary variable attivazione(stabilimenti);
+variable z fo;
+
+trasporto.up(stabilimenti,retail)=900;
+
+fo..
+         z=e=
+   sum((retail,stabilimenti), costo_trasporto(stabilimenti,retail)*trasporto(stabilimenti,retail))
+ + sum(stabilimenti,costo_attivazione(stabilimenti)* attivazione(stabilimenti));
+
+cap(stabilimenti)..
+         sum(retail,trasporto(stabilimenti,retail))=l=capacita(stabilimenti)*attivazione(stabilimenti);
+
+dom(retail)..
+         sum(stabilimenti,trasporto(stabilimenti,retail))=g=domanda(retail);
+
+model Stabil /all/;
+Stabil.optcr=0;
+solve Stabil using mip minimizing z;
+display attivazione.l, trasporto.l;
+
+parameter utilizzo(stabilimenti);
+utilizzo(stabilimenti)=sum(retail,trasporto.l(stabilimenti,retail));
+
+display utilizzo;

@@ -1,0 +1,19 @@
+B 2 C o m p i l a t i o n
+B 59 Equation Listing    SOLVE PT Using LP From line 46
+D 60 fo
+D 68 oretot
+D 74 percentaperto
+D 81 minaperto
+B 90 Column Listing      SOLVE PT Using LP From line 46
+E 91 x
+E 116 z
+B 125 Model Statistics    SOLVE PT Using LP From line 46
+B 141 Solution Report     SOLVE PT Using LP From line 46
+F 167 fo
+F 168 oretot
+F 169 percentaperto
+F 170 minaperto
+G 171 x
+G 181 z
+B 192 E x e c u t i o n
+I 193 x

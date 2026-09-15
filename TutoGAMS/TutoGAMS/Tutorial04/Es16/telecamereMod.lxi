@@ -1,0 +1,31 @@
+B 2 C o m p i l a t i o n
+B 114 Equation Listing    SOLVE local1 Using MIP From line 98
+D 115 cop
+D 131 fo1
+B 142 Column Listing      SOLVE local1 Using MIP From line 98
+E 143 x
+E 174 z
+B 183 Model Statistics    SOLVE local1 Using MIP From line 98
+B 199 Solution Report     SOLVE local1 Using MIP From line 98
+F 235 cop
+F 249 fo1
+G 250 x
+G 266 z
+B 277 E x e c u t i o n
+I 278 x
+I 285 z
+B 288 Equation Listing    SOLVE local2 Using MIP From line 101
+D 289 cop
+D 301 fo2
+B 310 Column Listing      SOLVE local2 Using MIP From line 101
+E 311 x
+E 342 z
+B 351 Model Statistics    SOLVE local2 Using MIP From line 101
+B 367 Solution Report     SOLVE local2 Using MIP From line 101
+F 403 cop
+F 417 fo2
+G 418 x
+G 434 z
+B 445 E x e c u t i o n
+I 446 x
+I 453 z

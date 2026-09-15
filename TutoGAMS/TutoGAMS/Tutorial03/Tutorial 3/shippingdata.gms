@@ -1,0 +1,38 @@
+set impianti commenti vari /Seattle, San-Diego/;
+set mercati insieme dei mercati /New-York, Chicago, Topeka/;
+
+parameter a(impianti) capacita massima impianti /
+Seattle=350
+San-Diego=600
+/;
+
+parameter b(mercati) domanda minima /
+New-York = 325
+Chicago = 300
+Topeka=275
+/;
+
+parameter costi(impianti,mercati) /
+Seattle.New-York = 2.5
+Seattle.Chicago = 1.7
+Seattle.Topeka = 1.8
+San-Diego.New-York = 2.5
+San-Diego.Chicago = 1.8
+San-Diego.Topeka = 1.4
+/;
+
+set collegamenti(impianti,mercati) Topeka è raggiungibile solo da Seattle
+/
+Seattle.New-York
+Seattle.Chicago
+Seattle.Topeka
+San-Diego.New-York
+San-Diego.Chicago
+/;
+
+
+set connessionilimitate(impianti,mercati) alcune connessioni hanno capacita limitata
+/
+Seattle.Chicago
+San-Diego.Chicago
+/;

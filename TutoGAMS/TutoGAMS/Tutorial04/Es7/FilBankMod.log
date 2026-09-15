@@ -1,0 +1,75 @@
+
+--- Job FilBankMod.gms Start 11/24/16 17:22:25 WEX-WEI 23.2.1 x86_64/MS Windows     
+GAMS Rev 232  Copyright (C) 1987-2009 GAMS Development. All rights reserved
+Licensee: Matematica, Statistica, Informatica e ApplicaziS091013:0751AN-WIN
+          Università degli Studi di Bergamo                          DC7952
+          License for teaching and research at degree granting institutions
+--- Starting compilation
+--- FilBankMod.gms(77) 3 Mb
+--- Starting execution: elapsed 0:00:00.005
+--- FilBankMod.gms(71) 4 Mb
+--- Generating MIP model FilBank
+--- FilBankMod.gms(73) 4 Mb
+---   5 rows  10 columns  26 non-zeroes
+---   9 discrete-columns
+--- FilBankMod.gms(73) 4 Mb
+--- Executing CPLEX: elapsed 0:00:00.010
+--- FilBankMod.gms(73) 4 Mb
+
+ILOG CPLEX       Aug 14, 2009 23.2.1 WEX 12361.12582 WEI x86_64/MS Windows
+Cplex 12.1.0, GAMS Link 34 
+
+Cplex MIP uses 1 of 4 parallel threads. Change default with option THREADS.
+Reading data...
+Starting Cplex...
+Tried aggregator 1 time.
+MIP Presolve eliminated 2 rows and 2 columns.
+MIP Presolve modified 10 coefficients.
+Reduced MIP has 3 rows, 8 columns, and 13 nonzeros.
+Reduced MIP has 7 binaries, 1 generals, 0 SOSs, and 0 indicators.
+Presolve time =    0.03 sec.
+Clique table members: 2.
+MIP emphasis: balance optimality and feasibility.
+MIP search method: dynamic search.
+Parallel mode: none, using 1 thread.
+Tried aggregator 1 time.
+LP Presolve eliminated 0 rows and 1 columns.
+Reduced LP has 3 rows, 7 columns, and 11 nonzeros.
+Presolve time =    0.00 sec.
+
+Iteration      Dual Objective            In Variable           Out Variable
+     1            1600.000000                   x(B)          budgetc slack
+Root relaxation solution time =    0.00 sec.
+
+        Nodes                                         Cuts/
+   Node  Left     Objective  IInf  Best Integer     Best Node    ItCnt     Gap
+
+*     0+    0                          750.0000                      1     --- 
+      0     0     1600.0000     1      750.0000     1600.0000        1  113.33%
+*     0+    0                         1550.0000     1600.0000        1    3.23%
+      0     0        cutoff           1550.0000     1600.0000        1    3.23%
+MIP status(101): integer optimal solution
+Fixing integer variables, and solving final LP...
+Tried aggregator 1 time.
+LP Presolve eliminated 5 rows and 10 columns.
+All rows and columns eliminated.
+Presolve time =    0.00 sec.
+Fixed MIP status(1): optimal
+
+Proven optimal solution.
+
+MIP Solution:         1550.000000    (1 iterations, 0 nodes)
+Final Solve:          1550.000000    (0 iterations)
+
+Best possible:        1550.000000
+Absolute gap:            0.000000
+Relative gap:            0.000000
+
+--- Restarting execution
+--- FilBankMod.gms(73) 2 Mb
+--- Reading solution for model FilBank
+--- FilBankMod.gms(73) 2 Mb
+--- Executing after solve: elapsed 0:00:00.098
+--- FilBankMod.gms(77) 3 Mb
+*** Status: Normal completion
+--- Job FilBankMod.gms Stop 11/24/16 17:22:25 elapsed 0:00:00.102

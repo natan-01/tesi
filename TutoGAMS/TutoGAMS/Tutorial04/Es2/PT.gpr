@@ -1,0 +1,21 @@
+[PROJECT]
+
+[RP:UNTITLED_1]
+1=
+
+[OPENWINDOW_1]
+MAXIM=0
+TOP=-6
+LEFT=-7
+HEIGHT=709
+WIDTH=1530
+
+[RP:PTMOD]
+1=
+
+[MRUFILES]
+1=C:\Users\pisciella\Dropbox\CORSO Ricerca Operativa\GAMS tutorial\Tutorial 4\Es2\PTmod.lst
+2=C:\Users\pisciella\Dropbox\CORSO Ricerca Operativa\GAMS tutorial\Tutorial 4\Es2\PTmod.gms
+3=C:\Users\pisciella\Dropbox\CORSO Ricerca Operativa\GAMS tutorial\Tutorial 4\Mod1\PTmod.lst
+4=C:\Users\pisciella\Dropbox\CORSO Ricerca Operativa\GAMS tutorial\Tutorial 4\Mod1\PTmod.gms
+5=C:\Users\pisciella\Dropbox\CORSO Ricerca Operativa\GAMS tutorial\Tutorial 4\Mod1\Untitled_1.gms

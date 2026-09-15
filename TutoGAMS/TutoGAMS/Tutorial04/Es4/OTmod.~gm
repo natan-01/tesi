@@ -1,0 +1,82 @@
+option lp=cplex;
+
+set giorni /lunedi,martedi,mercoledi,giovedi,venerdi,sabato,domenica/;
+
+
+set allavoro(giorni,giorni) personale presente nel giorno "giorno"
+/
+lunedi.giovedi
+lunedi.venerdi
+lunedi.sabato
+lunedi.domenica
+lunedi.lunedi
+martedi.venerdi
+martedi.sabato
+martedi.domenica
+martedi.lunedi
+martedi.martedi
+mercoledi.sabato
+mercoledi.domenica
+mercoledi.lunedi
+mercoledi.martedi
+mercoledi.mercoledi
+giovedi.domenica
+giovedi.lunedi
+giovedi.martedi
+giovedi.mercoledi
+giovedi.giovedi
+venerdi.lunedi
+venerdi.martedi
+venerdi.mercoledi
+venerdi.giovedi
+venerdi.venerdi
+sabato.martedi
+sabato.mercoledi
+sabato.giovedi
+sabato.venerdi
+sabato.sabato
+domenica.mercoledi
+domenica.giovedi
+domenica.venerdi
+domenica.sabato
+domenica.domenica
+/;
+
+parameter num_min(giorni) /
+lunedi=28
+martedi=18
+mercoledi=20
+giovedi=26
+venerdi=22
+sabato=13
+domenica=13
+/;
+
+parameter paga(giorni)/
+lunedi=250
+martedi=270
+mercoledi=310
+giovedi=319
+venerdi=310
+sabato=310
+domenica=285
+/;
+
+alias(giorno,giorni);
+
+positive variable x(giorni) numero operatori;
+variable z;
+
+equation fo, minreq(giorni);
+
+fo..
+         z=e=sum(giorni,paga(giorni)*x(giorni));
+
+minreq(giorno)..
+         sum(giorni$allavoro(giorno,giorni),x(giorni))=g=num_min(giorno);
+
+model OT /all/;
+
+solve OT using mip minimizing z;
+
+display x.l;

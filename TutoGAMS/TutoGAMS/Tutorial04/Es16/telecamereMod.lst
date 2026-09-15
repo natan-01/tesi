@@ -1,0 +1,470 @@
+GAMS Rev 232  WEX-WEI 23.2.1 x86_64/MS Windows          11/22/16 19:00:00 Page 1
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+C o m p i l a t i o n
+
+
+   1  option mip=cplex
+   2   
+   3  set localizzazioni /a1*a11/;
+   4   
+   5  alias(localizzazioni,loc);
+   6   
+   7  set cover(localizzazioni,loc)
+   8  /
+   9  a1.a1
+  10  a1.a4
+  11  a1.a8
+  12  a1.a2
+  13  a1.a3
+  14  a2.a1
+  15  a2.a2
+  16  a2.a3
+  17  a2.a7
+  18  a2.a8
+  19  a3.a1
+  20  a3.a2
+  21  a3.a3
+  22  a3.a11
+  23  a4.a1
+  24  a4.a4
+  25  a4.a8
+  26  a4.a5
+  27  a5.a4
+  28  a5.a5
+  29  a5.a6
+  30  a5.a9
+  31  a6.a5
+  32  a6.a6
+  33  a6.a9
+  34  a6.a7
+  35  a7.a6
+  36  a7.a7
+  37  a7.a2
+  38  a7.a10
+  39  a8.a1
+  40  a8.a4
+  41  a8.a8
+  42  a8.a9
+  43  a8.a10
+  44  a8.a11
+  45  a9.a8
+  46  a9.a9
+  47  a9.a10
+  48  a9.a11
+  49  a9.a6
+  50  a9.a5
+  51  a10.a8
+  52  a10.a9
+  53  a10.a10
+  54  a10.a11
+  55  a10.a7
+  56  a10.a2
+  57  a11.a8
+  58  a11.a9
+  59  a11.a10
+  60  a11.a11
+  61  a11.a3
+  62  /;
+  63   
+  64  parameter costo(localizzazioni)
+  65  /
+  66  a1=15
+  67  a2=20
+  68  a3=15
+  69  a4=20
+  70  a5=15
+  71  a6=20
+  72  a7=20
+  73  a8=20
+  74  a9=15
+  75  a10=20
+  76  a11=15
+  77  /;
+  78   
+  79  binary variable x(localizzazioni);
+  80  variable z;
+  81   
+  82  equation cop(localizzazioni);
+  83  cop(localizzazioni)..
+  84           sum(loc$cover(localizzazioni,loc),x(loc))=g=1;
+  85   
+  86  equation fo1;
+  87  fo1..
+  88    z=e=sum(localizzazioni,costo(localizzazioni)*x(localizzazioni));
+  89   
+  90   
+  91  equation fo2;
+  92  fo2..
+  93    z=e=sum(localizzazioni,x(localizzazioni));
+  94   
+  95  model local1 /cop,fo1/;
+  96  model local2 /cop,fo2/;
+  97   
+  98  solve local1 using mip minimizing z;
+  99  display x.l,z.l;
+ 100   
+ 101  solve local2 using mip minimizing z;
+ 102  display x.l,z.l;
+ 103   
+ 104   
+
+
+COMPILATION TIME     =        0.000 SECONDS      3 Mb  WEX232-232 Aug 11, 2009
+GAMS Rev 232  WEX-WEI 23.2.1 x86_64/MS Windows          11/22/16 19:00:00 Page 2
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Equation Listing    SOLVE local1 Using MIP From line 98
+
+
+---- cop  =G=  
+
+cop(a1)..  x(a1) + x(a2) + x(a3) + x(a4) + x(a8) =G= 1 ;
+     
+      (LHS = 0, INFES = 1 ****)
+     
+cop(a2)..  x(a1) + x(a2) + x(a3) + x(a7) + x(a8) =G= 1 ;
+     
+      (LHS = 0, INFES = 1 ****)
+     
+cop(a3)..  x(a1) + x(a2) + x(a3) + x(a11) =G= 1 ; (LHS = 0, INFES = 1 ****)
+     
+REMAINING 8 ENTRIES SKIPPED
+
+
+---- fo1  =E=  
+
+fo1..  - 15*x(a1) - 20*x(a2) - 15*x(a3) - 20*x(a4) - 15*x(a5) - 20*x(a6)
+     
+      - 20*x(a7) - 20*x(a8) - 15*x(a9) - 20*x(a10) - 15*x(a11) + z =E= 0 ;
+     
+      (LHS = 0)
+     
+GAMS Rev 232  WEX-WEI 23.2.1 x86_64/MS Windows          11/22/16 19:00:00 Page 3
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Column Listing      SOLVE local1 Using MIP From line 98
+
+
+---- x  
+
+x(a1)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+        1       cop(a1)
+        1       cop(a2)
+        1       cop(a3)
+        1       cop(a4)
+        1       cop(a8)
+      -15       fo1
+
+x(a2)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+        1       cop(a1)
+        1       cop(a2)
+        1       cop(a3)
+        1       cop(a7)
+        1       cop(a10)
+      -20       fo1
+
+x(a3)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+        1       cop(a1)
+        1       cop(a2)
+        1       cop(a3)
+        1       cop(a11)
+      -15       fo1
+
+REMAINING 8 ENTRIES SKIPPED
+
+---- z  
+
+z
+                (.LO, .L, .UP, .M = -INF, 0, +INF, 0)
+        1       fo1
+
+GAMS Rev 232  WEX-WEI 23.2.1 x86_64/MS Windows          11/22/16 19:00:00 Page 4
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Model Statistics    SOLVE local1 Using MIP From line 98
+
+
+MODEL STATISTICS
+
+BLOCKS OF EQUATIONS           2     SINGLE EQUATIONS           12
+BLOCKS OF VARIABLES           2     SINGLE VARIABLES           12
+NON ZERO ELEMENTS            65     DISCRETE VARIABLES         11
+
+
+GENERATION TIME      =        0.062 SECONDS      4 Mb  WEX232-232 Aug 11, 2009
+
+
+EXECUTION TIME       =        0.062 SECONDS      4 Mb  WEX232-232 Aug 11, 2009
+GAMS Rev 232  WEX-WEI 23.2.1 x86_64/MS Windows          11/22/16 19:00:00 Page 5
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Solution Report     SOLVE local1 Using MIP From line 98
+
+
+               S O L V E      S U M M A R Y
+
+     MODEL   local1              OBJECTIVE  z
+     TYPE    MIP                 DIRECTION  MINIMIZE
+     SOLVER  CPLEX               FROM LINE  98
+
+**** SOLVER STATUS     1 Normal Completion         
+**** MODEL STATUS      1 Optimal                   
+**** OBJECTIVE VALUE               50.0000
+
+ RESOURCE USAGE, LIMIT          0.043      1000.000
+ ITERATION COUNT, LIMIT        11    2000000000
+
+ILOG CPLEX       Aug 14, 2009 23.2.1 WEX 12361.12582 WEI x86_64/MS Windows
+Cplex 12.1.0, GAMS Link 34 
+
+Cplex MIP uses 1 of 4 parallel threads. Change default with option THREADS.
+MIP status(101): integer optimal solution
+Fixed MIP status(1): optimal
+Proven optimal solution.
+
+MIP Solution:           50.000000    (11 iterations, 0 nodes)
+Final Solve:            50.000000    (0 iterations)
+
+Best possible:          50.000000
+Absolute gap:            0.000000
+Relative gap:            0.000000
+
+
+---- EQU cop  
+
+       LOWER     LEVEL     UPPER    MARGINAL
+
+a1      1.000     1.000     +INF       .         
+a2      1.000     1.000     +INF       .         
+a3      1.000     1.000     +INF       .         
+a4      1.000     2.000     +INF       .         
+a5      1.000     1.000     +INF       .         
+a6      1.000     1.000     +INF       .         
+a7      1.000     1.000     +INF       .         
+a8      1.000     2.000     +INF       .         
+a9      1.000     2.000     +INF       .         
+a10     1.000     1.000     +INF       .         
+a11     1.000     1.000     +INF       .         
+
+                       LOWER     LEVEL     UPPER    MARGINAL
+
+---- EQU fo1             .         .         .        1.000      
+
+---- VAR x  
+
+       LOWER     LEVEL     UPPER    MARGINAL
+
+a1       .        1.000     1.000    15.000      
+a2       .         .        1.000    20.000      
+a3       .         .        1.000    15.000      
+a4       .         .        1.000    20.000      
+a5       .        1.000     1.000    15.000      
+a6       .         .        1.000    20.000      
+a7       .         .        1.000    20.000      
+a8       .         .        1.000    20.000      
+a9       .         .        1.000    15.000      
+a10      .        1.000     1.000    20.000      
+a11      .         .        1.000    15.000      
+
+                       LOWER     LEVEL     UPPER    MARGINAL
+
+---- VAR z              -INF     50.000     +INF       .         
+
+
+**** REPORT SUMMARY :        0     NONOPT
+                             0 INFEASIBLE
+                             0  UNBOUNDED
+GAMS Rev 232  WEX-WEI 23.2.1 x86_64/MS Windows          11/22/16 19:00:00 Page 6
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+E x e c u t i o n
+
+
+----     99 VARIABLE x.L  
+
+a1  1.000,    a5  1.000,    a10 1.000
+
+
+----     99 VARIABLE z.L                   =       50.000  
+GAMS Rev 232  WEX-WEI 23.2.1 x86_64/MS Windows          11/22/16 19:00:00 Page 7
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Equation Listing    SOLVE local2 Using MIP From line 101
+
+
+---- cop  =G=  
+
+cop(a1)..  x(a1) + x(a2) + x(a3) + x(a4) + x(a8) =G= 1 ; (LHS = 1)
+     
+cop(a2)..  x(a1) + x(a2) + x(a3) + x(a7) + x(a8) =G= 1 ; (LHS = 1)
+     
+cop(a3)..  x(a1) + x(a2) + x(a3) + x(a11) =G= 1 ; (LHS = 1)
+     
+REMAINING 8 ENTRIES SKIPPED
+
+
+---- fo2  =E=  
+
+fo2..  - x(a1) - x(a2) - x(a3) - x(a4) - x(a5) - x(a6) - x(a7) - x(a8) - x(a9)
+     
+      - x(a10) - x(a11) + z =E= 0 ; (LHS = 47, INFES = 47 ****)
+     
+GAMS Rev 232  WEX-WEI 23.2.1 x86_64/MS Windows          11/22/16 19:00:00 Page 8
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Column Listing      SOLVE local2 Using MIP From line 101
+
+
+---- x  
+
+x(a1)
+                (.LO, .L, .UP, .M = 0, 1, 1, 15)
+        1       cop(a1)
+        1       cop(a2)
+        1       cop(a3)
+        1       cop(a4)
+        1       cop(a8)
+       -1       fo2
+
+x(a2)
+                (.LO, .L, .UP, .M = 0, 0, 1, 20)
+        1       cop(a1)
+        1       cop(a2)
+        1       cop(a3)
+        1       cop(a7)
+        1       cop(a10)
+       -1       fo2
+
+x(a3)
+                (.LO, .L, .UP, .M = 0, 0, 1, 15)
+        1       cop(a1)
+        1       cop(a2)
+        1       cop(a3)
+        1       cop(a11)
+       -1       fo2
+
+REMAINING 8 ENTRIES SKIPPED
+
+---- z  
+
+z
+                (.LO, .L, .UP, .M = -INF, 50, +INF, 0)
+        1       fo2
+
+GAMS Rev 232  WEX-WEI 23.2.1 x86_64/MS Windows          11/22/16 19:00:00 Page 9
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Model Statistics    SOLVE local2 Using MIP From line 101
+
+
+MODEL STATISTICS
+
+BLOCKS OF EQUATIONS           2     SINGLE EQUATIONS           12
+BLOCKS OF VARIABLES           2     SINGLE VARIABLES           12
+NON ZERO ELEMENTS            65     DISCRETE VARIABLES         11
+
+
+GENERATION TIME      =        0.000 SECONDS      3 Mb  WEX232-232 Aug 11, 2009
+
+
+EXECUTION TIME       =        0.000 SECONDS      3 Mb  WEX232-232 Aug 11, 2009
+GAMS Rev 232  WEX-WEI 23.2.1 x86_64/MS Windows         11/22/16 19:00:00 Page 10
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Solution Report     SOLVE local2 Using MIP From line 101
+
+
+               S O L V E      S U M M A R Y
+
+     MODEL   local2              OBJECTIVE  z
+     TYPE    MIP                 DIRECTION  MINIMIZE
+     SOLVER  CPLEX               FROM LINE  101
+
+**** SOLVER STATUS     1 Normal Completion         
+**** MODEL STATUS      1 Optimal                   
+**** OBJECTIVE VALUE                3.0000
+
+ RESOURCE USAGE, LIMIT          0.087      1000.000
+ ITERATION COUNT, LIMIT        12    2000000000
+
+ILOG CPLEX       Aug 14, 2009 23.2.1 WEX 12361.12582 WEI x86_64/MS Windows
+Cplex 12.1.0, GAMS Link 34 
+
+Cplex MIP uses 1 of 4 parallel threads. Change default with option THREADS.
+MIP status(101): integer optimal solution
+Fixed MIP status(1): optimal
+Proven optimal solution.
+
+MIP Solution:            3.000000    (12 iterations, 0 nodes)
+Final Solve:             3.000000    (0 iterations)
+
+Best possible:           3.000000
+Absolute gap:            0.000000
+Relative gap:            0.000000
+
+
+---- EQU cop  
+
+       LOWER     LEVEL     UPPER    MARGINAL
+
+a1      1.000     2.000     +INF       .         
+a2      1.000     2.000     +INF       .         
+a3      1.000     1.000     +INF       .         
+a4      1.000     2.000     +INF       .         
+a5      1.000     1.000     +INF       .         
+a6      1.000     1.000     +INF       .         
+a7      1.000     1.000     +INF       .         
+a8      1.000     2.000     +INF       .         
+a9      1.000     2.000     +INF       .         
+a10     1.000     1.000     +INF       .         
+a11     1.000     1.000     +INF       .         
+
+                       LOWER     LEVEL     UPPER    MARGINAL
+
+---- EQU fo2             .         .         .        1.000      
+
+---- VAR x  
+
+       LOWER     LEVEL     UPPER    MARGINAL
+
+a1       .        1.000     1.000     1.000      
+a2       .         .        1.000     1.000      
+a3       .         .        1.000     1.000      
+a4       .         .        1.000     1.000      
+a5       .         .        1.000     1.000      
+a6       .        1.000     1.000     1.000      
+a7       .         .        1.000     1.000      
+a8       .        1.000     1.000     1.000      
+a9       .         .        1.000     1.000      
+a10      .         .        1.000     1.000      
+a11      .         .        1.000     1.000      
+
+                       LOWER     LEVEL     UPPER    MARGINAL
+
+---- VAR z              -INF      3.000     +INF       .         
+
+
+**** REPORT SUMMARY :        0     NONOPT
+                             0 INFEASIBLE
+                             0  UNBOUNDED
+GAMS Rev 232  WEX-WEI 23.2.1 x86_64/MS Windows         11/22/16 19:00:00 Page 11
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+E x e c u t i o n
+
+
+----    102 VARIABLE x.L  
+
+a1 1.000,    a6 1.000,    a8 1.000
+
+
+----    102 VARIABLE z.L                   =        3.000  
+
+
+EXECUTION TIME       =        0.000 SECONDS      3 Mb  WEX232-232 Aug 11, 2009
+
+
+USER: Matematica, Statistica, Informatica e ApplicaziS091013:0751AN-WIN
+      Università degli Studi di Bergamo                          DC7952
+      License for teaching and research at degree granting institutions
+
+
+**** FILE SUMMARY
+
+Input      C:\Users\pisciella\Dropbox\CORSO Ricerca Operativa\GAMS tutorial\Tuto
+           rial 4\Es16\telecamereMod.gms
+Output     C:\Users\pisciella\Dropbox\CORSO Ricerca Operativa\GAMS tutorial\Tuto
+           rial 4\Es16\telecamereMod.lst

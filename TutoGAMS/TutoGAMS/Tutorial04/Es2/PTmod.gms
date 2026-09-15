@@ -1,0 +1,48 @@
+option lp=cplex;
+
+set attivita /camminare,jogging,nuoto,ginnastica,bicicletta/;
+set allaperto(attivita) / camminare,jogging,bicicletta/;
+
+
+parameter calorie(attivita)
+/
+camminare=100
+jogging =300
+nuoto=200
+ginnastica=250
+bicicletta=150
+/;
+
+parameter maxore(attivita)
+/
+camminare=6
+jogging =3
+nuoto=0.8
+ginnastica=3
+bicicletta=5
+/;
+
+equation fo, oretot, percentaperto,minaperto;
+positive variable x(attivita);
+variable z;
+
+x.up(attivita)=maxore(attivita);
+
+fo..
+         z=e=sum(attivita,calorie(attivita)*x(attivita));
+
+minaperto..
+         sum(attivita$allaperto(attivita),x(attivita))=g=2;
+
+
+oretot..
+         sum(attivita,x(attivita))=e=8;
+
+percentaperto..
+         sum(attivita$allaperto(attivita),calorie(attivita)*x(attivita))=l=0.5*sum(attivita,calorie(attivita)*x(attivita));
+
+model PT /all/;
+
+solve PT using lp maximizing z;
+
+display x.l;

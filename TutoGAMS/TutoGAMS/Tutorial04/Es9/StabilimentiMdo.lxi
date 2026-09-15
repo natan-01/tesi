@@ -1,0 +1,21 @@
+B 2 C o m p i l a t i o n
+B 87 Equation Listing    SOLVE Stabil Using MIP From line 67
+D 88 fo
+D 103 dom
+D 120 cap
+B 137 Column Listing      SOLVE Stabil Using MIP From line 67
+E 138 trasporto
+E 161 attivazione
+E 179 z
+B 188 Model Statistics    SOLVE Stabil Using MIP From line 67
+B 204 Solution Report     SOLVE Stabil Using MIP From line 67
+F 238 fo
+F 244 dom
+F 253 cap
+G 256 trasporto
+G 273 attivazione
+G 281 z
+B 294 E x e c u t i o n
+I 295 attivazione
+I 301 trasporto
+I 309 utilizzo

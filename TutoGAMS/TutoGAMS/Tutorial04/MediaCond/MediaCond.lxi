@@ -1,0 +1,58 @@
+B 2 C o m p i l a t i o n
+B 4101 Include File Summary
+B 4116 Equation Listing    SOLVE condmean Using LP From line 4039
+D 4117 fo
+D 4789 percent
+D 5075 probound
+B 5088 Column Listing      SOLVE condmean Using LP From line 4039
+E 5089 v
+E 5112 z
+B 5121 Model Statistics    SOLVE condmean Using LP From line 4039
+B 5137 Solution Report     SOLVE condmean Using LP From line 4039
+F 5164 fo
+F 5165 percent
+F 5171 probound
+G 6171 v
+G 7176 z
+B 7189 E x e c u t i o n
+I 7192 z
+I 7193 v
+B 7201 Equation Listing    SOLVE dual Using LP From line 4056
+D 7202 fod
+D 7606 mind
+B 7619 Column Listing      SOLVE dual Using LP From line 4056
+E 7620 zd
+E 7628 eta
+E 8635 y
+B 8656 Model Statistics    SOLVE dual Using LP From line 4056
+B 8672 Solution Report     SOLVE dual Using LP From line 4056
+F 8699 fod
+F 8705 mind
+G 9705 zd
+G 9709 eta
+G 9710 y
+B 10722 E x e c u t i o n
+I 10725 zd
+B 10728 Equation Listing    SOLVE AllocazioneProduzione Using LP From line 4085
+D 10729 foP
+D 10735 totPort
+D 10740 PosCV
+D 10751 CVaR
+B 11158 Column Listing      SOLVE AllocazioneProduzione Using LP From line 4085
+E 11159 eta
+E 12167 y
+E 12186 q
+E 15204 zP
+B 15213 Model Statistics    SOLVE AllocazioneProduzione Using LP From line 4085
+B 15229 Solution Report     SOLVE AllocazioneProduzione Using LP From line 4085
+F 15256 foP
+F 15257 totPort
+F 15263 PosCV
+F 16266 CVaR
+G 16267 eta
+G 16271 y
+G 17276 q
+G 17284 zP
+B 17295 E x e c u t i o n
+I 17296 q
+I 17303 optCVaR

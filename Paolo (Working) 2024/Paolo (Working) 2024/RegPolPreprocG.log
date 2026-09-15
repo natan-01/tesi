@@ -1,0 +1,193 @@
+
+--- Job RegPolPreprocG.gms Start 01/26/24 17:39:40 39.1.1 dbf03b78 WEX-WEI x86 64bit/MS Windows
+--- Applying:
+    C:\GAMS\39\gmsprmNT.txt
+--- GAMS Parameters defined
+    Input "C:\Users\pisciell\Documents\AllFiles\CreateSAM\Paolo 2024\Paolo 2024\RegPolPreprocG.gms"
+    PageWidth 80
+    PageSize 0
+    PageContr 3
+    Action CE
+    ScrDir "C:\Users\pisciell\Documents\AllFiles\CreateSAM\Paolo 2024\Paolo 2024\225a\"
+    SysDir C:\GAMS\39\
+    WorkDir "C:\Users\pisciell\Documents\AllFiles\CreateSAM\Paolo 2024\Paolo 2024\"
+    LogOption 3
+    DFormat 0
+    TFormat 0
+    ErrorLog 99
+    IDE 1
+Licensee: Small MUD - 5 User License                     S230523|0002AP-GEN
+          Norwegian University of Science and Technology             DC7530
+          C:\GAMS\39\gamslice.txt
+          License Admin: Ruud Egging, ruud.egging@ntnu.no                  
+Processor information: 1 socket(s), 24 core(s), and 32 thread(s) available
+GAMS 39.1.1   Copyright (C) 1987-2022 GAMS Development. All rights reserved
+--- Starting compilation
+--- RegPolPreprocG.gms(51) 2 Mb
+--- . CaseData.gms(11) 2 Mb
+--- RegPolPreprocG.gms(55) 2 Mb
+--- call gdxxrw i=SAM_SSB_2019.xlsx o=AggKeys.gdx set=mapCMtoReg rng=RKey1 rdim=2 par=RegLvl rng=RLevel1 rdim=0 cdim=0 set=mapPSec rng=IKey1 rdim=2 set=mapPGood rng=PKey1 rdim=2 set=mapPFin rng=FKey1 rdim=2
+
+GDXXRW           39.1.1 dbf03b78 May 18, 2022          VS8 x86 32bit/MS Window
+Input file : C:\Users\pisciell\Documents\AllFiles\CreateSAM\Paolo 2024\Paolo 2024\SAM_SSB_2019.xlsx
+Output file: C:\Users\pisciell\Documents\AllFiles\CreateSAM\Paolo 2024\Paolo 2024\AggKeys.gdx
+Total time = 2172 Ms
+--- RegPolPreprocG.gms(57) 2 Mb
+--- call gdxxrw i=SAM_SSB_2019.xlsx o=AggCaseSets.gdx  dset=reg rng=RReg1 rdim=1 dset=good rng=PProd1 rdim=1 dset=sec rng=IInd1 rdim=1  dset=fin rng=FFin1 rdim=1
+
+GDXXRW           39.1.1 dbf03b78 May 18, 2022          VS8 x86 32bit/MS Window
+Input file : C:\Users\pisciell\Documents\AllFiles\CreateSAM\Paolo 2024\Paolo 2024\SAM_SSB_2019.xlsx
+Output file: C:\Users\pisciell\Documents\AllFiles\CreateSAM\Paolo 2024\Paolo 2024\AggCaseSets.gdx
+Total time = 1063 Ms
+--- RegPolPreprocG.gms(59) 2 Mb
+--- call gdxxrw i=SAM_SSB_2019.xlsx o=DisAgg.gdx  par=distrPCounty rng="3.1 Keys_County!c2" rdim=2 cdim=1 dset=county rng="0. Sets!b3" rdim=1
+
+GDXXRW           39.1.1 dbf03b78 May 18, 2022          VS8 x86 32bit/MS Window
+Input file : C:\Users\pisciell\Documents\AllFiles\CreateSAM\Paolo 2024\Paolo 2024\SAM_SSB_2019.xlsx
+Output file: C:\Users\pisciell\Documents\AllFiles\CreateSAM\Paolo 2024\Paolo 2024\DisAgg.gdx
+Total time = 1187 Ms
+--- RegPolPreprocG.gms(60) 2 Mb
+--- call gdxxrw i=SAM_SSB_2019.xlsx o=Elas.gdx  Squeeze=N par=elas_prod rng="5.1ElasProd!A2" par=elas_sec  rng="5.2ElasSec!A2" rdim=1 cdim=1
+
+GDXXRW           39.1.1 dbf03b78 May 18, 2022          VS8 x86 32bit/MS Window
+Input file : C:\Users\pisciell\Documents\AllFiles\CreateSAM\Paolo 2024\Paolo 2024\SAM_SSB_2019.xlsx
+Output file: C:\Users\pisciell\Documents\AllFiles\CreateSAM\Paolo 2024\Paolo 2024\Elas.gdx
+Total time = 1109 Ms
+--- RegPolPreprocG.gms(81) 2 Mb
+--- GDXin=C:\Users\pisciell\Documents\AllFiles\CreateSAM\Paolo 2024\Paolo 2024\AggKeys.gdx
+--- GDX File ($gdxIn) C:\Users\pisciell\Documents\AllFiles\CreateSAM\Paolo 2024\Paolo 2024\AggKeys.gdx
+--- RegPolPreprocG.gms(86) 2 Mb
+--- . SamRead+Map.gms(5) 2 Mb
+--- call gdxxrw i=SAM_SSB_2019.xlsx o=SAMsets.gdx MaxDupeErrors = 100        set=rsam rng="1.SAMnasj!d5" rdim=1 cdim=0 set=csam rng="1.SAMnasj!e4" cdim=1 rdim=0 set=SAMsec rng="2.1 SAM_Ind_Map!a2" rdim=1 dset=Psec rng="2.1 SAM_Ind_Map!b2" rdim=1 set=SAMgo
+
+GDXXRW           39.1.1 dbf03b78 May 18, 2022          VS8 x86 32bit/MS Window
+Input file : C:\Users\pisciell\Documents\AllFiles\CreateSAM\Paolo 2024\Paolo 2024\SAM_SSB_2019.xlsx
+Output file: C:\Users\pisciell\Documents\AllFiles\CreateSAM\Paolo 2024\Paolo 2024\SAMsets.gdx
+Total time = 1062 Ms
+--- . SamRead+Map.gms(6) 2 Mb
+--- call gdxxrw i=SAM_SSB_2019.xlsx o=SAMmatrices.gdx  par=SAMin rng="1.SAMnasj!d4" rdim=1 cdim=1 set=mapSecP rng="2.1 SAM_Ind_Map!a2" rdim=2 set=mapGoodP rng="2.2 SAM_Prod_Map!a2" rdim=2 set=mapFinP rng="2.3 SAM_Fin_Map!a2" rdim=2
+
+GDXXRW           39.1.1 dbf03b78 May 18, 2022          VS8 x86 32bit/MS Window
+Input file : C:\Users\pisciell\Documents\AllFiles\CreateSAM\Paolo 2024\Paolo 2024\SAM_SSB_2019.xlsx
+Output file: C:\Users\pisciell\Documents\AllFiles\CreateSAM\Paolo 2024\Paolo 2024\SAMmatrices.gdx
+Total time = 1015 Ms
+--- . SamRead+Map.gms(39) 2 Mb
+--- GDXin=C:\Users\pisciell\Documents\AllFiles\CreateSAM\Paolo 2024\Paolo 2024\SAMsets.gdx
+--- GDX File ($gdxIn) C:\Users\pisciell\Documents\AllFiles\CreateSAM\Paolo 2024\Paolo 2024\SAMsets.gdx
+--- . SamRead+Map.gms(42) 3 Mb
+--- GDXin=C:\Users\pisciell\Documents\AllFiles\CreateSAM\Paolo 2024\Paolo 2024\SAMmatrices.gdx
+--- GDX File ($gdxIn) C:\Users\pisciell\Documents\AllFiles\CreateSAM\Paolo 2024\Paolo 2024\SAMmatrices.gdx
+--- . SamRead+Map.gms(94) 3 Mb
+--- RegPolPreprocG.gms(91) 3 Mb
+--- . UserGSF.gms(22) 3 Mb
+--- GDXin=C:\Users\pisciell\Documents\AllFiles\CreateSAM\Paolo 2024\Paolo 2024\AggKeys.gdx
+--- GDX File ($gdxIn) C:\Users\pisciell\Documents\AllFiles\CreateSAM\Paolo 2024\Paolo 2024\AggKeys.gdx
+--- . UserGSF.gms(25) 3 Mb
+--- GDXin=C:\Users\pisciell\Documents\AllFiles\CreateSAM\Paolo 2024\Paolo 2024\AggCaseSets.gdx
+--- GDX File ($gdxIn) C:\Users\pisciell\Documents\AllFiles\CreateSAM\Paolo 2024\Paolo 2024\AggCaseSets.gdx
+--- . UserGSF.gms(100) 3 Mb
+--- GDXin=C:\Users\pisciell\Documents\AllFiles\CreateSAM\Paolo 2024\Paolo 2024\DisAgg.gdx
+--- GDX File ($gdxIn) C:\Users\pisciell\Documents\AllFiles\CreateSAM\Paolo 2024\Paolo 2024\DisAgg.gdx
+--- . UserGSF.gms(242) 4 Mb
+--- RegPolPreprocG.gms(113) 4 Mb
+--- GDXin=C:\Users\pisciell\Documents\AllFiles\CreateSAM\Paolo 2024\Paolo 2024\Elas.gdx
+--- GDX File ($gdxIn) C:\Users\pisciell\Documents\AllFiles\CreateSAM\Paolo 2024\Paolo 2024\Elas.gdx
+--- RegPolPreprocG.gms(131) 4 Mb
+--- . TradeGravity.gms(828) 4 Mb
+--- RegPolPreprocG.gms(134) 4 Mb
+--- . write_msam.gms(91) 4 Mb
+--- RegPolPreprocG.gms(139) 4 Mb
+--- . CheckBalance.gms(163) 4 Mb
+--- RegPolPreprocG.gms(148) 4 Mb
+--- Starting execution: elapsed 0:00:08.454
+--- RegPolPreprocG.gms(189) 5 Mb
+--- GDX File (execute_unload) C:\Users\pisciell\Documents\AllFiles\CreateSAM\Paolo 2024\Paolo 2024\SAM_Panda.gdx
+--- RegPolPreprocG.gms(293) 5 Mb
+--- GDX File (execute_unload) C:\Users\pisciell\Documents\AllFiles\CreateSAM\Paolo 2024\Paolo 2024\UserGSF.gdx
+--- RegPolPreprocG.gms(406) 5 Mb
+--- GDX File (execute_unload) C:\Users\pisciell\Documents\AllFiles\CreateSAM\Paolo 2024\Paolo 2024\regional_share.gdx
+--- RegPolPreprocG.gms(1238) 6 Mb
+--- Generating NLP model entropy_min
+--- RegPolPreprocG.gms(1239) 8 Mb
+---   1,351 rows  1,801 columns  4,801 non-zeroes
+---   0 nl-code  0 nl-non-zeroes
+--- Range statistics (absolute non-zero finite values)
+--- RHS       [min, max] : [ 1.000E+00, 5.801E+05] - Zero values observed as well
+--- Bound     [min, max] : [ 3.655E-07, 5.997E-01]
+--- Matrix    [min, max] : [ 1.000E+00, 8.592E+00]
+--- RegPolPreprocG.gms(1239) 6 Mb
+--- Executing PATHNLP (Solvelink=2): elapsed 0:00:08.593
+
+PATH-NLP         39.1.1 dbf03b78 May 18, 2022          WEI x86 64bit/MS Window
+
+Hessian lowTri size: 0
+Hessian   diag size: 0
+Hessian  total size: 0
+NLP size: 0 obj coefs, 1350 rows, 1800 cols, 4800 non-zeros, 0.20% dense.
+MCP size: 3150 rows/cols, 9600 non-zeros, 0.10% dense.
+
+Path 5.0.04 (Wed May 18 10:10:56 2022)
+Written by Todd Munson, Steven Dirkse, Youngdae Kim, and Michael Ferris
+
+Zero:     0 Single:   300 Double:     0
+Forced:     0 Redundant:   300
+Preprocessed size   : 2550
+
+INITIAL POINT STATISTICS
+Maximum of X. . . . . . . . . .  3.0222e+05 var: (XDDE_dV(c-COFF,R1,R1))
+Maximum of F. . . . . . . . . .  1.1642e-10 eqn: (EQ1(R1,c-COFF))
+Maximum of Grad F . . . . . . .  8.5921e+00 eqn: (EQ3(c-ICHA,R1,R1))
+                                            var: (XDDE_oV(c-ICHA,R1,R1))
+
+INITIAL JACOBIAN NORM STATISTICS
+Maximum Row Norm. . . . . . . .  9.5921e+00 eqn: (dLd_XDDE_oV(c-ICHA,R1,R1))
+Minimum Row Norm. . . . . . . .  2.0000e+00 eqn: (dLd_XDDE_oV(c-CHEA,R1,R1))
+Maximum Column Norm . . . . . .  9.5921e+00 var: (XDDE_oV(c-ICHA,R1,R1))
+Minimum Column Norm . . . . . .  2.0000e+00 var: (XDDE_oV(c-CHEA,R1,R1))
+
+Crash Log
+major  func  diff  size  residual    step       prox   (label)
+    0     0             2.4411e-10             0.0e+00 (EQ1(R1,c-COFF))
+
+Major Iteration Log
+major minor  func  grad  residual    step  type prox    inorm  (label)
+    0     0     1     1 2.4411e-10           I 0.0e+00 1.2e-10 (EQ1(R1,c-COFF))
+
+FINAL STATISTICS
+Inf-Norm of Complementarity . .  1.1642e-10 eqn: (EQ1(R1,c-COFF))
+Inf-Norm of Normal Map. . . . .  1.1642e-10 eqn: (EQ1(R1,c-COFF))
+Inf-Norm of Minimum Map . . . .  1.1642e-10 eqn: (EQ1(R1,c-COFF))
+Inf-Norm of Fischer Function. .  1.1642e-10 eqn: (EQ1(R1,c-COFF))
+Inf-Norm of Grad Fischer Fcn. .  1.1642e-10 eqn: (dLd_XDDE_dV(c-COFF,R1,R1))
+Two-Norm of Grad Fischer Fcn. .  5.1080e-10
+
+FINAL POINT STATISTICS
+Maximum of X. . . . . . . . . .  3.0222e+05 var: (XDDE_dV(c-COFF,R1,R1))
+Maximum of F. . . . . . . . . .  1.1642e-10 eqn: (EQ1(R1,c-COFF))
+Maximum of Grad F . . . . . . .  8.5921e+00 eqn: (EQ3(c-ICHA,R1,R1))
+                                            var: (XDDE_oV(c-ICHA,R1,R1))
+
+ ** EXIT - solution found.
+
+Major Iterations. . . . 0
+Minor Iterations. . . . 0
+Restarts. . . . . . . . 0
+Crash Iterations. . . . 0
+Gradient Steps. . . . . 0
+Function Evaluations. . 1
+Gradient Evaluations. . 1
+Basis Time. . . . . . . 0.000000
+Total Time. . . . . . . 0.031000
+Residual. . . . . . . . 2.441127e-10
+Postsolved residual: 2.4411e-10
+The MCP solved
+NLP objective: 1
+
+--- Reading solution for model entropy_min
+--- Executing after solve: elapsed 0:00:08.927
+--- RegPolPreprocG.gms(1572) 7 Mb
+--- GDX File (execute_unload) C:\Users\pisciell\Documents\AllFiles\CreateSAM\Paolo 2024\Paolo 2024\sjekk.gdx
+--- RegPolPreprocG.gms(1576) 7 Mb
+--- GDX File (execute_unload) C:\Users\pisciell\Documents\AllFiles\CreateSAM\Paolo 2024\Paolo 2024\msam_bal.gdx
+*** Status: Normal completion
+--- Job RegPolPreprocG.gms Stop 01/26/24 17:39:49 elapsed 0:00:08.938
