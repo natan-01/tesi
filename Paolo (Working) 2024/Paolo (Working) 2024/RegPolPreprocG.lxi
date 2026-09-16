@@ -1,132 +1,132 @@
 B 3 C o m p i l a t i o n
-B 1961 Include File Summary
-B 2044 E x e c u t i o n
-I 2046 "(1) Read i..."
-I 2048 "--- Check ..."
-I 2050 sumPGG
-I 2051 sumPSS
-I 2053 SAM_sum_init
-I 2054 SAM_sum_p
-I 2056 "(2) aggreg..."
-I 2057 distrPCountyProd
-I 2176 "Mark 1..."
-I 2177 distrPRegProdN
-I 2220 mapCMtoReg
-I 2247 "Mark 2..."
-I 2249 "Mark 3..."
-I 2251 "Mark 4..."
-I 2253 "Mark 5..."
-I 2255 "Mark 6..."
-I 2256 distrsec_public
-I 2299 distrsec_local
-I 2318 distrgood_share_public
-I 2362 "Create reg..."
-I 2364 regions
-I 2365 "regions, ..."
-I 2366 goods
-I 2367 " commoditi..."
-I 2368 sectors
-I 2369 " sectors...."
-I 2371 "    (3) cr..."
-I 2373 "    betwee..."
-I 2375 SAM_sum_u
-I 2376 mapPFin
-I 2397 "Checking b..."
-I 2399 "Sales bala..."
-I 2400 diffXD_n
-I 2413 "Demand bal..."
-I 2414 diffX_n
-I 2429 "Investment..."
-I 2430 investment_bal_n
-I 2432 "Global tra..."
-I 2433 trade_bal_global_n
-I 2434 XDDZ
-I 3045 USGN
-I 3188 indicPROD
-I 3232 "div0 1..."
-I 3234 "div0 2..."
-I 3236 capital_check
-I 3241 indicCONS
-I 3284 indicIO
-I 4205 UGFN
-I 4242 TRANSFZ
-I 4246 EROWZ
-I 4290 "div0 6..."
-I 4292 "Trade marg..."
-I 4293 CZ
-I 4336 CGZ
-I 4363 IOZ
-I 5284 TMTZ
-I 5289 TMXZ
-I 5302 "div0 8..."
-I 5303 TMCZ
-I 5312 "div0 9..."
-I 5313 CZ
-I 5356 IZ
-I 5391 CGZ
-I 5418 TMCZ_R
-I 5445 TMXZ
-I 5457 TMXZ_old
-I 5469 "div0 10..."
-I 5470 MROWZ
-I 5514 "div0 11..."
-I 5516 "div0 12..."
-I 5517 demandr
-I 5560 supplyr
-I 5603 ch_difference
-I 5615 matrise1
-I 5685 "div0 13..."
-I 5687 "div0 14..."
-I 5689 "problem wi..."
-I 5690 gcount
-I 5700 cons_check
-I 5704 XDDE_o
-I 5860 XDDE_d
-I 6017 "===== Star..."
-B 6021 Range Statistics    SOLVE entropy_min Using NLP From line 1239
-B 6032 Model Statistics    SOLVE entropy_min Using NLP From line 1239
-B 6046 Solution Report     SOLVE entropy_min Using NLP From line 1239
-F 6063 EQ1
-F 6218 EQ2
-F 6373 EQ3
-F 7128 EQ4
-F 7283 EQ5
-F 7440 EQentropy2
-G 7442 XDDE_oV
-G 8197 XDDE_dV
-G 8952 SUM_oV
-G 9107 SUM_dV
-G 9264 entropy
-B 9273 E x e c u t i o n
-I 9273 XDDE_oV
-I 9430 XDDE_dV
-I 9586 XDDE_oV
-I 9742 diffXD
-I 9785 diffX
-I 9827 indicator_sec
-I 9842 entropy
-I 9843 TAXCZR
-I 9986 TMCRZ
-I 10073 XZ
-I 10116 diffXD
-I 10159 diffX
-I 10202 TMCRZ_f
-I 10229 TAXCZR_f
-I 10272 TRADEZ_f
-I 10308 CZ_old
-I 10351 CZ
-I 10395 " (4) combi..."
-I 10397 "     also,..."
-I 10398 TMXZ
-I 10411 "     Perfo..."
-I 10412 diXD
-I 10447 salebal
-I 10490 diX
-I 10533 demandbal
-I 10576 trade_bal
-I 10619 investment_bal
-I 10624 invbal
-I 10629 trade_bal_global
-I 10634 tradebal_glob
-I 10640 householdbal
-I 10645 govbal
+B 1580 Include File Summary
+B 1610 E x e c u t i o n
+I 1612 "(1) Read i..."
+I 1614 "--- Check ..."
+I 1616 sumPGG
+I 1617 sumPSS
+I 1619 SAM_sum_init
+I 1620 SAM_sum_p
+I 1622 "(2) aggreg..."
+I 1623 distrPCountyProd
+I 1650 "Mark 1..."
+I 1651 distrPRegProdN
+I 1663 mapCMtoReg
+I 1690 "Mark 2..."
+I 1692 "Mark 3..."
+I 1694 "Mark 4..."
+I 1696 "Mark 5..."
+I 1698 "Mark 6..."
+I 1699 distrsec_public
+I 1711 distrsec_local
+I 1723 distrgood_share_public
+I 1736 "Create reg..."
+I 1738 regions
+I 1739 "regions, ..."
+I 1740 goods
+I 1741 " commoditi..."
+I 1742 sectors
+I 1743 " sectors...."
+I 1745 "    (3) cr..."
+I 1747 "    betwee..."
+I 1749 SAM_sum_u
+I 1750 mapPFin
+I 1768 "Checking b..."
+I 1770 "Sales bala..."
+I 1771 diffXD_n
+I 1777 "Demand bal..."
+I 1778 diffX_n
+I 1784 "Investment..."
+I 1785 investment_bal_n
+I 1787 "Global tra..."
+I 1788 trade_bal_global_n
+I 1789 XDDZ
+I 1969 USGN
+I 2004 indicPROD
+I 2017 "div0 1..."
+I 2019 "div0 2..."
+I 2021 capital_check
+I 2025 indicCONS
+I 2037 indicIO
+I 2223 UGFN
+I 2260 TRANSFZ
+I 2264 EROWZ
+I 2277 "div0 6..."
+I 2279 "Trade marg..."
+I 2280 CZ
+I 2292 CGZ
+I 2304 IOZ
+I 2490 TMTZ
+I 2495 TMXZ
+I 2508 "div0 8..."
+I 2509 TMCZ
+I 2515 "div0 9..."
+I 2516 CZ
+I 2528 IZ
+I 2540 CGZ
+I 2552 TMCZ_R
+I 2564 TMXZ
+I 2576 TMXZ_old
+I 2589 "div0 10..."
+I 2590 MROWZ
+I 2603 "div0 11..."
+I 2605 "div0 12..."
+I 2606 demandr
+I 2618 supplyr
+I 2630 ch_difference
+I 2635 matrise1
+I 2672 "div0 13..."
+I 2674 "div0 14..."
+I 2676 "problem wi..."
+I 2677 gcount
+I 2683 cons_check
+I 2687 XDDE_o
+I 2873 XDDE_d
+I 3060 "===== Star..."
+B 3064 Range Statistics    SOLVE entropy_min Using NLP From line 1239
+B 3075 Model Statistics    SOLVE entropy_min Using NLP From line 1239
+B 3089 Solution Report     SOLVE entropy_min Using NLP From line 1239
+F 3106 EQ1
+F 3291 EQ2
+F 3476 EQ3
+F 4561 EQ4
+F 4746 EQ5
+F 4933 EQentropy2
+G 4935 XDDE_oV
+G 6020 XDDE_dV
+G 7105 SUM_oV
+G 7290 SUM_dV
+G 7477 entropy
+B 7486 E x e c u t i o n
+I 7486 XDDE_oV
+I 7673 XDDE_dV
+I 7859 XDDE_oV
+I 8045 diffXD
+I 8057 diffX
+I 8069 indicator_sec
+I 8075 entropy
+I 8076 TAXCZR
+I 8118 TMCRZ
+I 8160 XZ
+I 8172 diffXD
+I 8184 diffX
+I 8196 TMCRZ_f
+I 8208 TAXCZR_f
+I 8220 TRADEZ_f
+I 8256 CZ_old
+I 8268 CZ
+I 8281 " (4) combi..."
+I 8283 "     also,..."
+I 8284 TMXZ
+I 8297 "     Perfo..."
+I 8298 diXD
+I 8310 salebal
+I 8322 diX
+I 8334 demandbal
+I 8346 trade_bal
+I 8358 investment_bal
+I 8363 invbal
+I 8368 trade_bal_global
+I 8373 tradebal_glob
+I 8379 householdbal
+I 8384 govbal
